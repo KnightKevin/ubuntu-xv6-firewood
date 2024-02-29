@@ -23,12 +23,15 @@ $K/kernel : $(OBJS)
 	@echo "build kernel"
 	$(LD) -T $K/kernel.ld -o $@ $^ 
 	$(OBJDUMP) -S $K/kernel > $K/kernel.asm
+	$(OBJDUMP) -t $K/kernel | sed '1,/SYMBOL TABLE:/d;s/ .* / /; /^$$/d' > $K/kernel.sym
+
 
 clean: 
-	rm -rf $K/*.o $K/*.d $K/kernel $K/*.asm
+	rm -rf $K/*.o $K/*.d $K/kernel $K/*.asm $K/*.sym
 
 qemu: kernel/kernel
-	$(QEMU) $(QEMUOPTS)
+	 #$(QEMU) $(QEMUOPTS)
+	 @echo "dasdf"
 
 qemu-gdb:
 	$(QEMU) $(QEMUOPTS) $(QEMUGDB)
