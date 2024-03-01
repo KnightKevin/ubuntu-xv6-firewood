@@ -2,7 +2,8 @@
 K = kernel
 
 OBJS = \
-	$K/entry.o
+	$K/entry.o \
+	$K/start.o
 
 QEMU = qemu-system-riscv64
 
