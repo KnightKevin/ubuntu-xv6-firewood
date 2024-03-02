@@ -1,10 +1,9 @@
 .text
 _entry:
-    .equ v, 1234
+    # 配置堆栈，先随便弄一个，作用就是支持c语言
+    li sp, 0x8000ffff
 
-    li a0, v
-    li a1, 0x3
-    li a2, 0x4
+    # start.c
     call start
 
 spin:
