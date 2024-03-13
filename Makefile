@@ -37,7 +37,7 @@ clean:
 	rm -rf $K/*.o $K/*.d $K/kernel $K/*.asm $K/*.sym .gdbinit
 
 qemu: kernel/kernel
-	 #$(QEMU) $(QEMUOPTS)
+	 $(QEMU) $(QEMUOPTS)
 	 @echo "dasdf"
 
 qemu-gdb: kernel/kernel .gdbinit
