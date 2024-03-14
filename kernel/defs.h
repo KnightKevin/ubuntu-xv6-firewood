@@ -10,3 +10,10 @@ void uartputc_sync(char c);
 
 // printf.c
 void printf(char *fmt, ...);
+
+// kalloc.c
+void kinit(void);
+
+// vm.c
+void kvminit(void);
+void kvminithart(void);

@@ -13,4 +13,13 @@ SECTIONS
         *(.data)
     }
 
+    .rodata :{
+        *(.rodata)
+    }
+
+    .bss :{
+        *(.bss)
+    }
+
+    PROVIDE(end = .);
 }
