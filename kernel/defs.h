@@ -13,7 +13,11 @@ void printf(char *fmt, ...);
 
 // kalloc.c
 void kinit(void);
+void kfree(void *pa);
 
 // vm.c
 void kvminit(void);
 void kvminithart(void);
+
+// string.c
+void* memset(void*, int, unsigned int);
