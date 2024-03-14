@@ -36,3 +36,8 @@ void uartinit(void) {
     WriteReg(IER, 3);
 
 }
+
+
+void uartputc_sync(char c) {
+    WriteReg(THX, c);
+}

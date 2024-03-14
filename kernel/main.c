@@ -4,7 +4,6 @@ void main() {
 
     consoleinit();
 
-
-
+    printf("hahahahaha\n");
 
 }
