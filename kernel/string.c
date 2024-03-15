@@ -1,7 +1,7 @@
-#include "defs.h"
 #include "types.h"
+#include "defs.h"
 
-void* memset(void *dst, int c, unsigned int n) {
+void* memset(void *dst, int c, uint n) {
     char *p;
 
     p = (char *)dst;

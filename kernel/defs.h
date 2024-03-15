@@ -1,4 +1,5 @@
 // 参考xv6的目录分布
+#include "types.h"
 
 // console.c
 void consoleinit(void);
@@ -20,4 +21,4 @@ void kvminit(void);
 void kvminithart(void);
 
 // string.c
-void* memset(void*, int, unsigned int);
+void* memset(void*, int, uint);

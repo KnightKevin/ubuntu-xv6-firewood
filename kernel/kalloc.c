@@ -1,5 +1,5 @@
-#include "defs.h"
 #include "types.h"
+#include "defs.h"
 #include "risc.h"
 #include "memlayout.h"
 
@@ -25,7 +25,7 @@ void kinit() {
 
 // 从一段地址范围，收集可用的内存
 void freerange(void *pa_start, void *pa_end) {
-    printf("freerange");
+    printf("freerange\n");
 
     // 向上取整获得正真的开始地址
     char *p = (char *) PGROUNDUP((uint64)pa_start);
