@@ -40,7 +40,7 @@ void kfree(void *pa) {
     struct run *r;
     r = (struct run *)pa;
 
-
+    // 将这部分的内存数据清空(安全处理)
     memset(pa, 1, PGSIZE);
 
     r->next = kmem.freelist;
