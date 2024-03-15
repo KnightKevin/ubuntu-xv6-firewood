@@ -11,5 +11,5 @@ void* memset(void *dst, int c, unsigned int n) {
         p[i] = c;
     }
 
-    return 0;
+    return dst;
 }
