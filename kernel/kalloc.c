@@ -46,3 +46,11 @@ void kfree(void *pa) {
     r->next = kmem.freelist;
     kmem.freelist = r;
 }
+
+void* kalloc() {
+    struct run *p = kmem.freelist;
+
+    kmem.freelist = p->next;
+
+    return p;
+} 
