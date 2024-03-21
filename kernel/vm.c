@@ -58,7 +58,7 @@ pte_t* walk(pagetable_t pagetable, uint64 va, int alloc) {
     }
 
     // 获得叶子pte，也就是真正存va映射的物理地址的地方
-
+    index = PX(va, level);
     return &pagetable[index];
 
 }
