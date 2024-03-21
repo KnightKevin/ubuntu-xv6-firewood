@@ -21,9 +21,9 @@
 - [x] 为什么在def.h中不能用uint这个类型，很奇怪（解决办法：直接在defs.h中添加types.h的引用。具体描述：为什么xv6源码中没有引用这个types.h也不影响编译呢，那是因为在`.c`文件中引用的时候注意了引用顺序，他一定是先引types.h再引defs.h。这样做我觉得不科学，应该在defs.h中直接添加types.h的引用）
 - [ ] 了解为啥向上取整使用 (sz+PGSIZE-1) & ~(PGSIZE-1)，感觉是二进制中关于除法的加减法实现
 - [ ] 源码中在uartputc_sync()中判断了某个标志位，满足条件才写入数据，否则就一直轮询等待，目前还没弄清楚为什么
-- [ ] 创建kernel pagetable
-- [ ] 将内核要用到的设备物理地址映射到对应的虚拟地址中
-- [ ] 实现kvmmap()方法,注意实现pte的flag配置(pte_r|pte_w|pte_x)
+- [x] 创建kernel pagetable
+- [x] 将内核要用到的设备物理地址映射到对应的虚拟地址中
+- [x] 实现kvmmap()方法,注意实现pte的flag配置(pte_r|pte_w|pte_x)
 - [ ] mappages()方法最后需要将物理地址转为pte并配置对应的flag
 - [ ] walk()待实现
 - [ ] 编写将level=1,2的pte转为页表的物理地址
