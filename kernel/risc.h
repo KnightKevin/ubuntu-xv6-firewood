@@ -15,6 +15,6 @@
 #define PTE_U (1L << 4) // 1 -> user can access
 
 
-typedef uint64 pte;
+typedef uint64 pte_t;
 
 typedef uint64 *pagetable_t;

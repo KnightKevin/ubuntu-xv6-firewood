@@ -1,7 +1,7 @@
 #include "types.h"
+#include "risc.h"
 #include "defs.h"
 #include "memlayout.h"
-#include "risc.h"
 
 #define PX_MASK(level) (12+9*level)
 #define PX(a,level) ((a&(0x1fff<<PX_MASK(level)))>>PX_MASK(level))
@@ -28,15 +28,16 @@ void kvminithart() {
  * 根据va找到pagetable中的pte，alloc非0表示会生成必要的page table信息,否则直接返回0
  * 
 */
-pte* walk(pagetable_t pagetable, uint64 va, int alloc) {
+pte_t* walk(pagetable_t pagetable, uint64 va, int alloc) {
     // 按层级开始找
     int level = 2;
     for (level; level >=0; level--) {
         // 获取index;
         int index = PX(va, level);
-        pte *pte = pagetable[index];
+        pte_t *pte = pagetable[index];
         
         // 判断是否有pte是否有效，若无效就根据alloc判断是否新增
+
     }
 }
 
@@ -58,7 +59,7 @@ int  mappages(pagetable_t pagetable, uint64 va, uint64 size, uint64 pa, int perm
 
     for (s ; s <= last ; s+=size) {
         // 通过va用walk()获取到叶子节点pte，如果没有就生成
-        pte *pte = walk(pagetable, s, 1);
+        pte_t *pte = walk(pagetable, s, 1);
 
         // 判断这个pte是否被分配过了
         if (*pte & PTE_V) {

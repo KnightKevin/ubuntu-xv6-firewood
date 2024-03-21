@@ -2,6 +2,8 @@
 //  16550a UART的驱动low-level程序
 //
 
+#include "types.h"
+#include "risc.h"
 #include "defs.h"
 #include "memlayout.h"
 
