@@ -26,4 +26,6 @@
 - [ ] 实现kvmmap()方法,注意实现pte的flag配置(pte_r|pte_w|pte_x)
 - [ ] mappages()方法最后需要将物理地址转为pte并配置对应的flag
 - [ ] walk()待实现
+- [ ] 编写将level=1,2的pte转为页表的物理地址
+- [ ] 封装一个宏实现物理地址转pte
 

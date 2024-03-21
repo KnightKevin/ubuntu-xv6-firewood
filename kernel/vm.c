@@ -25,20 +25,42 @@ void kvminithart() {
 }
 
 /**
- * 根据va找到pagetable中的pte，alloc非0表示会生成必要的page table信息,否则直接返回0
+ * 根据va找到pagetable中的pte（叶子pte/0级pte）地址！！！！！，
+ * alloc非0表示会生成必要的page table信息,注意！！！只构建必要的paget table。
  * 
 */
 pte_t* walk(pagetable_t pagetable, uint64 va, int alloc) {
     // 按层级开始找
     int level = 2;
-    for (level; level >=0; level--) {
+    int index;
+    for (level; level > 0; level--) {
         // 获取index;
-        int index = PX(va, level);
-        pte_t *pte = pagetable[index];
+        index = PX(va, level);
+        pte_t *pte = &pagetable[index];
         
         // 判断是否有pte是否有效，若无效就根据alloc判断是否新增
 
+        if (*pte & PTE_V) {
+            // 已存在
+            // 获取到下一个level的页表地址
+            pagetable = (pagetable_t)(*pte&0xfffffffffff000);
+
+        } else {
+            // 不存在，看是否需要创建
+            if (!alloc || (pagetable = ((pagetable_t *)kalloc())) == 0) {
+                return 0;
+            }
+
+            memset(pagetable, 0, PGSIZE);
+
+            *pte = (((uint64)pagetable)&0xfffffffffff000) | PTE_V;
+        }
     }
+
+    // 获得叶子pte，也就是真正存va映射的物理地址的地方
+
+    return &pagetable[index];
+
 }
 
 void kvmmap(uint64 va, uint64 pa, uint64 sz, int perm) {
