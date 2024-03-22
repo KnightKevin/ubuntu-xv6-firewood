@@ -1,4 +1,5 @@
 #include "types.h"
+#include "risc.h"
 #include "defs.h"
 
 void* memset(void *dst, int c, uint n) {
@@ -6,7 +7,7 @@ void* memset(void *dst, int c, uint n) {
 
     p = (char *)dst;
 
-    int i;
+    uint i;
     for (i = 0; i<n; i++) {
         p[i] = c;
     }

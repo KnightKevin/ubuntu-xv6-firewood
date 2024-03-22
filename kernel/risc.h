@@ -6,7 +6,7 @@
 
 #define PGSIZE 4096 
 
-#define MAXVA (2<<((9+9+9+12-1)))
+#define MAXVA (1L<<(9+9+9+12-1))
 
 #define PTE_V (1<<0)
 #define PTE_R (1<<1)

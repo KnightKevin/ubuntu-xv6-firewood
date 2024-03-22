@@ -7,6 +7,7 @@ void main() {
     consoleinit();
     printf("\n");
     printf("kernel is booting\n");
+
     printf("\n");
 
     kinit();         // physical page allocator

@@ -7,13 +7,16 @@
 #include "defs.h"
 #include "memlayout.h"
 
-#define WriteReg(reg, v) (*((unsigned char *)(UART0+reg)) = (v))
+#define Reg(reg) ((unsigned char *)(UART0+reg))
+#define WriteReg(reg, v) (*Reg(reg) = (v))
+#define ReadReg(reg) (*Reg(reg))
 #define IER 1
 #define LCR 3
 #define LSB 0
 #define MSB 1
 #define FCR 2
 #define THX 0
+#define LSR 5
 
 void uartinit(void) {
     // IER 关闭中断
@@ -41,5 +44,13 @@ void uartinit(void) {
 
 
 void uartputc_sync(char c) {
+    // 要判断队列是否有位置，有的化就放进去
+    // char p = *((unsigned char *)(UART0+LSR));
+    // while((ReadReg(LSR) & 1<<5) == 0)
+    // {
+
+    // }
+
+
     WriteReg(THX, c);
 }

@@ -33,7 +33,7 @@ pte_t* walk(pagetable_t pagetable, uint64 va, int alloc) {
     // 按层级开始找
     int level = 2;
     int index;
-    for (level; level > 0; level--) {
+    for (; level > 0; level--) {
         // 获取index;
         index = PX(va, level);
         pte_t *pte = &pagetable[index];
@@ -47,7 +47,7 @@ pte_t* walk(pagetable_t pagetable, uint64 va, int alloc) {
 
         } else {
             // 不存在，看是否需要创建
-            if (!alloc || (pagetable = ((pagetable_t *)kalloc())) == 0) {
+            if (!alloc || (pagetable = ((pagetable_t)kalloc())) == 0) {
                 return 0;
             }
 
@@ -79,7 +79,7 @@ int  mappages(pagetable_t pagetable, uint64 va, uint64 size, uint64 pa, int perm
     uint64 s = PGROUNDDOWN(va);
     uint64 last = PGROUNDDOWN(va+size-1);
 
-    for (s ; s <= last ; s+=size) {
+    for (; s <= last ; s+=size) {
         // 通过va用walk()获取到叶子节点pte，如果没有就生成
         pte_t *pte = walk(pagetable, s, 1);
 
@@ -89,8 +89,8 @@ int  mappages(pagetable_t pagetable, uint64 va, uint64 size, uint64 pa, int perm
         }
 
         // 配置 pte flag
-        *pte| perm | PTE_V;
+        //*pte| perm | PTE_V;
     }
 
-
+    return 0;
 }

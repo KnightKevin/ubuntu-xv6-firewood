@@ -2,8 +2,15 @@
 .text
 .equ UART_BASE,0x10010000
 _entry:
-    # 配置堆栈，先随便弄一个，作用就是支持c语言
-    li sp, 0x8000ffff
+    # 配置堆栈，作用就是支持c语言
+    # stack0来自start.c
+    la sp, stack0
+    li a0, 1024*4
+	csrr a1, mhartid
+    addi a1, a1, 1
+    mul a0, a0, a1
+    add sp, sp, a0
+    // li sp, 0x80050000
 
     # uart base
 

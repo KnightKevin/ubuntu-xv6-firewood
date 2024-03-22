@@ -1,3 +1,7 @@
+#include "param.h"
+
+// entry.S needs one stack per CPU.
+__attribute__ ((aligned (16))) char stack0[4096 * NCPU];
 
 // 在这申明，然后再main.c里面定义，自然是ld会帮你做的事情
 void main();
