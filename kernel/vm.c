@@ -28,7 +28,7 @@ void kvminit() {
 }
 
 void kvminithart() {
-    uint64 satp = (*kernel_pagetable >> 12)||(0x80000L<<44);
+    uint64 satp = ((((uint64)kernel_pagetable) >> 12)|(0x8L<<60));
 
     asm volatile("csrw satp, %0" : : "r" (satp));
 }

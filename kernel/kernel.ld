@@ -7,8 +7,10 @@ SECTIONS
 
     .text :{
         *(.text)
+         . = ALIGN(0x1000);
     }
-    PROVIDE(etxt = .);
+    etext = .;
+
 
     .rodata :{
         *(.rodata)
