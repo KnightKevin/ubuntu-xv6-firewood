@@ -24,9 +24,11 @@
 - [x] 创建kernel pagetable
 - [x] 将内核要用到的设备物理地址映射到对应的虚拟地址中
 - [x] 实现kvmmap()方法,注意实现pte的flag配置(pte_r|pte_w|pte_x)
-- [ ] mappages()方法最后需要将物理地址转为pte并配置对应的flag
-- [ ] walk()待实现
-- [ ] 编写将level=1,2的pte转为x页表的物理地址
-- [ ] 封装一个宏实现物理地址转pte
+- [x] mappages()方法最后需要将物理地址转为pte并配置对应的flag
+- [x] walk()待实现
+- [x] 编写将level=1,2的pte转为x页表的物理地址
+- [x] 封装一个宏实现物理地址转pte
 - [x] __attribute__ ((aligned (16))) char stack0[4096*NCPU]; 用来定义c语言要用的栈，这个写法就是要求这个变量是16字节对齐
-- [ ] C语言执行前提的栈配置须要仔细看看在entry.S文件中
+- [x] C语言执行前提的栈配置须要仔细看看在entry.S文件中
+- [ ] 配置satp
+- [ ] 封装一个宏，专门写入csr寄存器

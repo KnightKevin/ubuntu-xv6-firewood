@@ -5,8 +5,11 @@
 
 #define PX_MASK(level) (12+9*level)
 #define PX(a,level) ((a&(0x1fff<<PX_MASK(level)))>>PX_MASK(level))
+#define PA2PTE(pa) (((uint64)pa)&0xfffffffffff000)
 
 pagetable_t kernel_pagetable;
+
+extern char etext[];
 
 void kvminit() {
     printf("kvminit\n");
@@ -17,11 +20,17 @@ void kvminit() {
     // 将必要的设备的物理地址映射成对应的虚拟地址
     kvmmap(UART0, UART0, PGSIZE, PTE_R|PTE_W);
 
-    // 将页表地址写入satp
+    // map kernel text executable and read-only.
+    kvmmap(KERNBASE, KERNBASE, (uint64)etext-KERNBASE, PTE_R | PTE_X);
+
+    // map kernel data and the physical RAM we'll make use of.
+    kvmmap((uint64)etext, (uint64)etext, PHYSTOP-(uint64)etext, PTE_R | PTE_W);
 }
 
 void kvminithart() {
-    printf("kvminithart\n");
+    uint64 satp = (*kernel_pagetable >> 12)||(0x80000L<<44);
+
+    asm volatile("csrw satp, %0" : : "r" (satp));
 }
 
 /**
@@ -53,7 +62,7 @@ pte_t* walk(pagetable_t pagetable, uint64 va, int alloc) {
 
             memset(pagetable, 0, PGSIZE);
 
-            *pte = (((uint64)pagetable)&0xfffffffffff000) | PTE_V;
+            *pte = PA2PTE(pagetable) | PTE_V;
         }
     }
 
@@ -90,6 +99,7 @@ int  mappages(pagetable_t pagetable, uint64 va, uint64 size, uint64 pa, int perm
 
         // 配置 pte flag
         //*pte| perm | PTE_V;
+        *pte = PA2PTE(pa) | perm | PTE_V;
     }
 
     return 0;

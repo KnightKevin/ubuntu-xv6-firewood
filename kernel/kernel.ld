@@ -8,6 +8,7 @@ SECTIONS
     .text :{
         *(.text)
     }
+    PROVIDE(etxt = .);
 
     .rodata :{
         *(.rodata)
