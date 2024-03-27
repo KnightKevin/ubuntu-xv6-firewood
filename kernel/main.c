@@ -14,7 +14,9 @@ void main() {
     kvminit();       // create kernel page table
     kvminithart();   // turn on paging
     procinit();
+    userinit();
 
 
+    scheduler();
 
 }

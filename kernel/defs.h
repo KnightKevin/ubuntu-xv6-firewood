@@ -29,3 +29,5 @@ void* memset(void*, int, uint);
 
 // proc.c
 void procinit(void);
+void userinit(void);
+void scheduler(void);
