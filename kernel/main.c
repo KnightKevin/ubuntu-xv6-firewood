@@ -13,6 +13,7 @@ void main() {
     kinit();         // physical page allocator
     kvminit();       // create kernel page table
     kvminithart();   // turn on paging
+    procinit();
 
 
 

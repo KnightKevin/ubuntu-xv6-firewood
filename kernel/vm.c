@@ -12,7 +12,6 @@ pagetable_t kernel_pagetable;
 extern char etext[];
 
 void kvminit() {
-    printf("kvminit\n");
     // 创建内核页表
     kernel_pagetable = (pagetable_t) kalloc();
     memset(kernel_pagetable, 0, PGSIZE);
