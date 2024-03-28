@@ -1,6 +1,12 @@
 #include "types.h"
 #include "risc.h"
 #include "defs.h"
+#include "proc.h"
+
+// 最大的程序数
+#define NPROC 1;
+
+struct proc PROC[NPROC];
 
 
 void procinit() {
