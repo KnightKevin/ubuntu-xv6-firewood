@@ -28,6 +28,11 @@ int  mappages(pagetable_t pagetable, uint64 va, uint64 size, uint64 pa, int perm
 void* memset(void*, int, uint);
 
 // proc.c
+int cpuid(void);
 void procinit(void);
 void userinit(void);
 void scheduler(void);
+struct cpu* mycpu(void);
+
+// swtch.S
+void swtch(struct context *old, struct context *new);

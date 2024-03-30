@@ -18,3 +18,11 @@
 typedef uint64 pte_t;
 
 typedef uint64 *pagetable_t;
+
+static inline uint64
+r_tp() {
+    uint64 x;
+    asm volatile("mv %0,tp" : "=r" (x));
+
+    return x;
+}
