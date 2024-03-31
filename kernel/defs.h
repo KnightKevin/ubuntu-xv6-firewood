@@ -23,9 +23,11 @@ void kvminit(void);
 void kvminithart(void);
 void kvmmap(uint64 va, uint64 pa, uint64 sz, int perm);
 int  mappages(pagetable_t pagetable, uint64 va, uint64 size, uint64 pa, int perm);
+void uvminit(pagetable_t pagetable, uchar *src, uint sz);
 
 // string.c
 void* memset(void*, int, uint);
+void memmove(void *dst, const void *src, uint n);
 
 // proc.c
 int cpuid(void);

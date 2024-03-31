@@ -21,14 +21,16 @@ struct context {
 };
 
 struct proc {
+    int pid;
     uint64 KSTACK;
 
     // swtch() here to run process
-    struct context *context;
+    struct context context;
+    uint64 sz;
 };
 
 struct cpu {
     struct proc *p;
-    struct context *context;
+    struct context context;
 };
 

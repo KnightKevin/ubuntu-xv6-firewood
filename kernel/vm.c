@@ -1,10 +1,11 @@
 #include "types.h"
 #include "risc.h"
+#include "proc.h"
 #include "defs.h"
 #include "memlayout.h"
 
 #define PX_MASK(level) (12+9*level)
-#define PX(a,level) ((a&(0x1fff<<PX_MASK(level)))>>PX_MASK(level))
+#define PX(a,level) ((a&(0x1ff<<PX_MASK(level)))>>PX_MASK(level))
 #define PA2PTE(pa) (((uint64)pa)&0xfffffffffff000)
 
 pagetable_t kernel_pagetable;
@@ -102,4 +103,17 @@ int  mappages(pagetable_t pagetable, uint64 va, uint64 size, uint64 pa, int perm
     }
 
     return 0;
+}
+
+void uvminit(pagetable_t pagetable, uchar *src, uint sz) {
+
+    // 先分配内存
+    uchar *mem = (uchar *)kalloc();
+    memset(mem, 0, PGSIZE);
+
+    // 把物理内存注册到页表中
+    mappages(pagetable, 0, sz, (uint64) kalloc(), PTE_R|PTE_X|PTE_U);
+
+    // 将数据src写到这个内存中
+    memmove(mem, src, sz);
 }

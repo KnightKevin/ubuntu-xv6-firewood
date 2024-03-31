@@ -11,7 +11,8 @@ OBJS = \
 	$K/kalloc.o \
 	$K/vm.o \
 	$K/string.o \
-	$K/proc.o
+	$K/proc.o \
+	$K/swtch.o
 
 QEMU = qemu-system-riscv64
 
