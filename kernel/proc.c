@@ -24,6 +24,8 @@ uchar initcode[] = {
   0x00, 0x00, 0x00, 0x00
 };
 
+void forkret(void);
+
 
 void procinit() {
     printf("procinit\n");
@@ -33,7 +35,7 @@ void procinit() {
     uint64 va = 0x3fffffe000;
     kvmmap(va, (uint64)pa, PGSIZE, PTE_R|PTE_W);
 
-    PROC[0].KSTACK = va;
+    PROC[0].kstack = va;
     memset(pa, 0, PGSIZE);
 
 
@@ -57,7 +59,10 @@ void procinit() {
     memset(&p->context, 0, sizeof(p->context));
 
     // set sp
-    p->context.sp = p->KSTACK - PGSIZE;
+    p->context.sp = p->kstack + PGSIZE;
+
+    // 告诉swtch.S中ret后跳转到哪里去
+    p->context.ra = (uint64) forkret;
 
 
     // 将一个二进制程序放入对应的pagetable中
@@ -68,6 +73,7 @@ void procinit() {
 
     // 将这个proc分配给cpu
     cpu->p = p;
+
 
     swtch(&cpu->context, &p->context);
 
@@ -99,4 +105,8 @@ struct cpu* mycpu() {
 
     return c;
 
+}
+
+void forkret() {
+    printf("forkret");
 }

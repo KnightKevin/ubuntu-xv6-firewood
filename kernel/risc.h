@@ -19,6 +19,16 @@ typedef uint64 pte_t;
 
 typedef uint64 *pagetable_t;
 
+static inline void
+w_satp(uint64 satp) {
+    asm volatile("csrw satp, %0" : : "r" (satp));
+}
+
+static inline void
+sfence_vma() {
+    asm volatile("sfence.vma zero, zero");
+}
+
 static inline uint64
 r_tp() {
     uint64 x;

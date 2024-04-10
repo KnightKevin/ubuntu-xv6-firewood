@@ -22,7 +22,7 @@ struct context {
 
 struct proc {
     int pid;
-    uint64 KSTACK;
+    uint64 kstack;
 
     // swtch() here to run process
     struct context context;

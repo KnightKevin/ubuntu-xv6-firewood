@@ -49,3 +49,5 @@
 - [ ] 为什么结构体cpu中的context不用指针 
 - [ ] 由于没有配置ra，导致swtch.S ret后默认返回到了0x0地址(ra默认为0)去运行了，这是不对的，难怪源码中要配置一个ra地址，上面的注释写着这是proc开始运行时运行环境第一次从kernel转到user space的地址（也就是s-mode => u-mode）
 - [ ] scase中有一个bit位是用来区分中断和异常的
+- [ ] 还没理解forkret是做什么的，先跳过
+- [ ] swtch.S ret后进入forkret后报错了，初步查看应该是sp配置的不对，须要仔细检查一下
