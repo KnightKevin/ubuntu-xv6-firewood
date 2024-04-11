@@ -90,7 +90,7 @@ int  mappages(pagetable_t pagetable, uint64 va, uint64 size, uint64 pa, int perm
     uint64 s = PGROUNDDOWN(va);
     uint64 last = PGROUNDDOWN(va+size-1);
 
-    for (; s <= last ; s+=size) {
+    for (; s <= last ; s+=PGSIZE, pa+=PGSIZE) {
         // 通过va用walk()获取到叶子节点pte，如果没有就生成
         pte_t *pte = walk(pagetable, s, 1);
 

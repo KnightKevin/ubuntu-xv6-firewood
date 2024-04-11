@@ -38,11 +38,6 @@ void procinit() {
     PROC[0].kstack = va;
     memset(pa, 0, PGSIZE);
 
-
-
-    
-
-
     // 拿到一个proc
     struct proc *p;
     struct cpu *cpu = mycpu();
