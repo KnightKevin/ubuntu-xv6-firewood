@@ -75,7 +75,7 @@ pte_t* walk(pagetable_t pagetable, uint64 va, int alloc) {
 }
 
 void kvmmap(uint64 va, uint64 pa, uint64 sz, int perm) {
-    if (mappages(kernel_pagetable, va, sz, pa, perm)) {
+    if (mappages(kernel_pagetable, va, sz, pa, perm) != 0) {
         printf("page fault!");
     }
 }
@@ -90,9 +90,13 @@ int  mappages(pagetable_t pagetable, uint64 va, uint64 size, uint64 pa, int perm
     uint64 s = PGROUNDDOWN(va);
     uint64 last = PGROUNDDOWN(va+size-1);
 
+    pte_t *pte;
+
     for (; s <= last ; s+=PGSIZE, pa+=PGSIZE) {
         // 通过va用walk()获取到叶子节点pte，如果没有就生成
-        pte_t *pte = walk(pagetable, s, 1);
+        if ((pte = walk(pagetable, s, 1)) == 0) {
+            return -1;
+        }
 
         // 判断这个pte是否被分配过了
         if (*pte & PTE_V) {
