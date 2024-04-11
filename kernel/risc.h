@@ -36,3 +36,11 @@ r_tp() {
 
     return x;
 }
+
+static inline uint64
+r_mstatus() {
+    uint64 x;
+    asm volatile("csrr %0,mstatus" : "=r" (x));
+
+    return x;
+}
