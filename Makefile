@@ -48,7 +48,6 @@ clean:
 
 qemu: kernel/kernel
 	 $(QEMU) $(QEMUOPTS)
-	 @echo "dasdf"
 
 qemu-gdb: kernel/kernel .gdbinit
 	$(QEMU) $(QEMUOPTS) $(QEMUGDB)

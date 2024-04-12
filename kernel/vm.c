@@ -28,7 +28,9 @@ void kvminit() {
 }
 
 void kvminithart() {
-    uint64 satp = ((((uint64)kernel_pagetable) >> 12)|(0x8L<<60));
+    // uint64 satp = ((((uint64)kernel_pagetable) >> 12)|(0x8L<<60));
+
+    uint64 satp = MAKE_SATP(kernel_pagetable);
 
     w_satp(satp);
 
