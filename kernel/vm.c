@@ -6,7 +6,8 @@
 
 #define PX_MASK(level) (12+9*level)
 #define PX(a,level) ((a&(0x1ff<<PX_MASK(level)))>>PX_MASK(level))
-#define PA2PTE(pa) (((uint64)pa)&0xfffffffffff000)
+#define PA2PTE(pa) ((((uint64)pa)>>12)<<10)
+#define PTE2PA(pte) ((((uint64)pte)>>10)<<12)
 
 pagetable_t kernel_pagetable;
 
@@ -28,12 +29,7 @@ void kvminit() {
 }
 
 void kvminithart() {
-    // uint64 satp = ((((uint64)kernel_pagetable) >> 12)|(0x8L<<60));
-
-    uint64 satp = MAKE_SATP(kernel_pagetable);
-
-    w_satp(satp);
-
+    w_satp(MAKE_SATP(kernel_pagetable));
     sfence_vma();
 }
 
@@ -56,7 +52,7 @@ pte_t* walk(pagetable_t pagetable, uint64 va, int alloc) {
         if (*pte & PTE_V) {
             // 已存在
             // 获取到下一个level的页表地址
-            pagetable = (pagetable_t)(*pte&0xfffffffffff000);
+            pagetable = (pagetable_t)PTE2PA(*pte);
 
         } else {
             // 不存在，看是否需要创建

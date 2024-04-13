@@ -103,5 +103,5 @@ struct cpu* mycpu() {
 }
 
 void forkret() {
-    printf("forkret");
+    printf("forkret\n");
 }

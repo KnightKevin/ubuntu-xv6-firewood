@@ -50,4 +50,6 @@
 - [ ] 由于没有配置ra，导致swtch.S ret后默认返回到了0x0地址(ra默认为0)去运行了，这是不对的，难怪源码中要配置一个ra地址，上面的注释写着这是proc开始运行时运行环境第一次从kernel转到user space的地址（也就是s-mode => u-mode）
 - [ ] scase中有一个bit位是用来区分中断和异常的
 - [ ] 还没理解forkret是做什么的，先跳过
-- [ ] swtch.S ret后进入forkret后报错了，初步查看应该是sp配置的不对，须要仔细检查一下
+- [x] swtch.S ret后进入forkret后报错了，初步查看应该是sp配置的不对，须要仔细检查一下
+- [x] 严重代码错误：start.c跳到main.c后没有成功从m-mode转到s-mode
+- [x] 严重代码错误：pte构造错误，导致页表数据错误，所以cpu寻址也会错误
