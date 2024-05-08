@@ -65,3 +65,22 @@ static inline void
 w_mstatus(uint64 x) {
     asm volatile("csrw mstatus, %0" : : "r" (x));
 }
+
+
+// Supervisor Status Register, sstatus
+
+#define SSTATUS_SPP (1L << 8) // Previous mode, 1=s, 0=u
+#define SSTATUS_SPIE (1L << 5) // Supervisor Pervious Interrupt Enable
+
+static inline uint64
+r_sstatus() {
+    uint64 x;
+    asm volatile("csrr %0,sstatus" : "=r" (x));
+
+    return x;
+}
+
+static inline void
+w_sstatus(uint64 x) {
+    asm volatile("csrw sstatus, %0" : : "r" (x));
+}

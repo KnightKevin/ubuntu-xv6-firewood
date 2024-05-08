@@ -53,3 +53,4 @@
 - [x] swtch.S ret后进入forkret后报错了，初步查看应该是sp配置的不对，须要仔细检查一下
 - [x] 严重代码错误：start.c跳到main.c后没有成功从m-mode转到s-mode
 - [x] 严重代码错误：pte构造错误，导致页表数据错误，所以cpu寻址也会错误
+- [ ] trap.c ((void (*)(uint64, uint64))fn)(0, 0) 没跳过去，不晓得为什么

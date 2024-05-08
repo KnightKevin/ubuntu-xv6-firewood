@@ -38,3 +38,6 @@ struct cpu* mycpu(void);
 
 // swtch.S
 void swtch(struct context *old, struct context *new);
+
+// trap.c
+void usertrapret(void);

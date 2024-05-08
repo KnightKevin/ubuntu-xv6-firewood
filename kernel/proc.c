@@ -104,4 +104,8 @@ struct cpu* mycpu() {
 
 void forkret() {
     printf("forkret\n");
+
+    // return to user space
+
+    usertrapret();
 }

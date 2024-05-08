@@ -13,6 +13,8 @@ pagetable_t kernel_pagetable;
 
 extern char etext[];
 
+extern char trampoline[];
+
 void kvminit() {
     // 创建内核页表
     kernel_pagetable = (pagetable_t) kalloc();
@@ -26,6 +28,8 @@ void kvminit() {
 
     // map kernel data and the physical RAM we'll make use of.
     kvmmap((uint64)etext, (uint64)etext, PHYSTOP-(uint64)etext, PTE_R | PTE_W);
+
+    kvmmap((uint64)TRAMPOLINE, (uint64)trampoline, PGSIZE, PTE_X|PTE_R);
 }
 
 void kvminithart() {
