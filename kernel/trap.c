@@ -21,7 +21,7 @@ void usertrapret(void) {
 
     // jump to trampoline.S at the top of memory.
     // 0x3ffffff000
-    uint64 fn = 0x3ffffff002 ;
+    uint64 fn = 0x3ffffff000 ;
 
     ((void (*)(uint64, uint64))fn)(0, 0);
 
