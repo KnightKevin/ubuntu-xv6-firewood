@@ -24,6 +24,8 @@ void kvminithart(void);
 void kvmmap(uint64 va, uint64 pa, uint64 sz, int perm);
 int  mappages(pagetable_t pagetable, uint64 va, uint64 size, uint64 pa, int perm);
 void uvminit(pagetable_t pagetable, uchar *src, uint sz);
+void uvmfree(pagetable_t pagetable);
+pagetable_t uvmcreate(void);
 
 // string.c
 void* memset(void*, int, uint);
@@ -35,6 +37,8 @@ void procinit(void);
 void userinit(void);
 void scheduler(void);
 struct cpu* mycpu(void);
+struct proc* myproc(void);
+pagetable_t proc_pagetable(struct proc *p);
 
 // swtch.S
 void swtch(struct context *old, struct context *new);

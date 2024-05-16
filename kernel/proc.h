@@ -22,6 +22,7 @@ struct context {
 
 struct proc {
     int pid;
+    pagetable_t pagetable;
     uint64 kstack;
 
     // swtch() here to run process
@@ -32,5 +33,10 @@ struct proc {
 struct cpu {
     struct proc *p;
     struct context context;
+};
+
+
+struct trapframe {
+    /* 0 */uint64 kernel_satp;
 };
 

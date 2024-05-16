@@ -55,3 +55,5 @@
 - [x] 严重代码错误：pte构造错误，导致页表数据错误，所以cpu寻址也会错误
 - [ ] trap.c ((void (*)(uint64, uint64))fn)(0, 0) 没跳过去，不晓得为什么
 - [ ] kernel.ld 中*(.text .text.*) 为啥要这样写，感觉有目的
+- [ ] push_off()和push_on()是干嘛的？我第一次见使用在了中
+- [ ] proc.c中的allocproc()声明为啥要用static

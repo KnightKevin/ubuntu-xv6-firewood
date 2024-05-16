@@ -18,11 +18,18 @@ void usertrapret(void) {
     x |= SSTATUS_SPIE; // enable interrupts in user mode
     w_sstatus(x);
 
+    struct proc *p = myproc();
+
+
+    uint64 satp = MAKE_SATP(p->pagetable);
+
+
 
     // jump to trampoline.S at the top of memory.
-    // 0x3ffffff000
-    uint64 fn = 0x3ffffff000 ;
+    // 由于我们获取到的userret和trampoline事物理地址，但是我们现在处于虚拟地址中
+    // 所以我须要手动转换到虚拟地址
+    uint64 fn = TRAMPOLINE + (userret - trampoline);
 
-    ((void (*)(uint64, uint64))fn)(0, 0);
+    ((void (*)(uint64, uint64))fn)(TRAPFRAME, satp);
 
 }

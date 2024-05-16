@@ -125,3 +125,18 @@ void uvminit(pagetable_t pagetable, uchar *src, uint sz) {
     // 将数据src写到这个内存中
     memmove(mem, src, sz);
 }
+
+void uvmfree(pagetable_t pagetable) {
+    // todo 将已分配的pagetable释放
+}
+
+pagetable_t uvmcreate() {
+    pagetable_t pagetable;
+    pagetable = (pagetable_t) kalloc();
+    if (pagetable == 0) {
+        return 0;
+    }
+
+    memset(pagetable, 0, PGSIZE);
+    return pagetable;
+}
