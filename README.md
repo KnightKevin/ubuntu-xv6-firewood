@@ -57,3 +57,4 @@
 - [ ] kernel.ld 中*(.text .text.*) 为啥要这样写，感觉有目的
 - [ ] push_off()和push_on()是干嘛的？我第一次见使用在了中
 - [ ] proc.c中的allocproc()声明为啥要用static
+- [ ] 经过调试proc.h userinit()中没有将initcode二进制数据写入到对应的页表地址中

@@ -17,4 +17,5 @@ userret:
     csrw satp, a1
     sfence.vma zero, zero
 
+    # 0x0000003ffffff00a
     sret
