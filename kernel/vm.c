@@ -120,7 +120,7 @@ void uvminit(pagetable_t pagetable, uchar *src, uint sz) {
     memset(mem, 0, PGSIZE);
 
     // 把物理内存注册到页表中
-    mappages(pagetable, 0, sz, (uint64) kalloc(), PTE_R|PTE_X|PTE_U);
+    mappages(pagetable, 0, sz, (uint64)mem, PTE_R|PTE_X|PTE_U);
 
     // 将数据src写到这个内存中
     memmove(mem, src, sz);
