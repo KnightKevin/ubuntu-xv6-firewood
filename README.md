@@ -53,8 +53,12 @@
 - [x] swtch.S ret后进入forkret后报错了，初步查看应该是sp配置的不对，须要仔细检查一下
 - [x] 严重代码错误：start.c跳到main.c后没有成功从m-mode转到s-mode
 - [x] 严重代码错误：pte构造错误，导致页表数据错误，所以cpu寻址也会错误
-- [ ] trap.c ((void (*)(uint64, uint64))fn)(0, 0) 没跳过去，不晓得为什么
+- [x] trap.c ((void (*)(uint64, uint64))fn)(0, 0) 没跳过去，不晓得为什么.——不记得了， 貌似是我改了kernel.ld的配置，让trampsec按4k对齐。
 - [ ] kernel.ld 中*(.text .text.*) 为啥要这样写，感觉有目的
 - [ ] push_off()和push_on()是干嘛的？我第一次见使用在了中
 - [ ] proc.c中的allocproc()声明为啥要用static
-- [ ] 经过调试proc.h userinit()中没有将initcode二进制数据写入到对应的页表地址中
+- [x] 经过调试proc.h userinit()中没有将initcode二进制数据写入到对应的页表地址中
+- [ ] 需要掌握ecall的运行逻辑
+- [ ] 调用ecall会再次回到s-mode中，肯定要保护好切换前的现场（寄存器）
+- [ ] 记住哪些寄存器在发生中断的时候需要处理
+- [ ] s-mode再切换到u-mode的要了解处理现场的细节 
