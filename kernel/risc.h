@@ -18,6 +18,8 @@
 #define SATP_SV39 (0x8L << 60)
 #define MAKE_SATP(pagetable) (SATP_SV39 | (((uint64)pagetable) >> 12))
 
+
+
 #define PTE_V (1<<0)
 #define PTE_R (1<<1)
 #define PTE_W (1<<2)
@@ -71,6 +73,7 @@ w_mstatus(uint64 x) {
 
 #define SSTATUS_SPP (1L << 8) // Previous mode, 1=s, 0=u
 #define SSTATUS_SPIE (1L << 5) // Supervisor Pervious Interrupt Enable
+#define SSTATUS_SIE (1L << 1)  // Supervisor Interrupt Enable
 
 static inline uint64
 r_sstatus() {
@@ -83,4 +86,17 @@ r_sstatus() {
 static inline void
 w_sstatus(uint64 x) {
     asm volatile("csrw sstatus, %0" : : "r" (x));
+}
+
+// static inline uint64
+// r_sstatus() {
+//     uint64 x;
+//     asm volatile("csrr %0,sstatus" : "=r" (x));
+
+//     return x;
+// }
+
+static inline void
+w_stvec(uint64 x) {
+    asm volatile("csrw stvec, %0" : : "r" (x));
 }

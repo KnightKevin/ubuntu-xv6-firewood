@@ -8,8 +8,13 @@ extern char trampoline[];
 
 extern char userret[];
 
+extern char uservec[];
+
 void usertrapret(void) {
     // todo 关中断
+    w_sstatus(r_sstatus() & ~SSTATUS_SIE);
+
+    w_stvec(TRAMPOLINE + (uservec - trampoline));
 
     // set S Previous Privilege mode to User
     uint64 x = r_sstatus();
@@ -33,3 +38,4 @@ void usertrapret(void) {
     ((void (*)(uint64, uint64))fn)(TRAPFRAME, satp);
 
 }
+
