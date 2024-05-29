@@ -10,6 +10,13 @@ extern char userret[];
 
 extern char uservec[];
 
+// handle an interrupt, exception, or system call from user space.
+// called from trampoline.S
+// s-mode
+void usertrap() {
+    printf("usertrap");
+}
+
 void usertrapret(void) {
     // todo 关中断
     w_sstatus(r_sstatus() & ~SSTATUS_SIE);
@@ -24,6 +31,8 @@ void usertrapret(void) {
     w_sstatus(x);
 
     struct proc *p = myproc();
+
+    p->trapframe->kernel_satp = (uint64) usertrap;
 
 
     uint64 satp = MAKE_SATP(p->pagetable);

@@ -146,7 +146,11 @@ pagetable_t proc_pagetable(struct proc *p) {
         return 0;
     }
 
-    // todo map the trapframe
+    // map the trapframe
+    if (mappages(pagetable, TRAPFRAME, PGSIZE, p->trapframe, PTE_R|PTE_W) < 0) {
+        uvmunmap(pagetable, TRAMPOLINE, 1, 0);
+        uvmfree(pagetable);
+    }
 
     return pagetable;
 }

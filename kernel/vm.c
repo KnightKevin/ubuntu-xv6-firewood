@@ -130,6 +130,14 @@ void uvmfree(pagetable_t pagetable) {
     // todo 将已分配的pagetable释放
 }
 
+// Remove npages of mappings starting from va. va must be
+// page-aligned. The mappings must exist.
+// Optionally free the physical memory.
+void uvmunmap(pagetable_t pagetable, uint64 va, uint64 npages, int do_free)
+{
+  // todo uvmunmap
+}
+
 pagetable_t uvmcreate() {
     pagetable_t pagetable;
     pagetable = (pagetable_t) kalloc();

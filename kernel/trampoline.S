@@ -8,8 +8,13 @@ trampoline:
 .align 4
 .global uservec
 uservec:
+    # todo save user registers in TRAPFRAME
     li t0,234
 
+    # todo restore kernel stack pointer from p->trapframe->kernel_sp
+
+    
+    # jump to usertrap(), which does not return
     jr t0;
 
 userret:

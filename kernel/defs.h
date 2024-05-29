@@ -26,6 +26,7 @@ int  mappages(pagetable_t pagetable, uint64 va, uint64 size, uint64 pa, int perm
 void uvminit(pagetable_t pagetable, uchar *src, uint sz);
 void uvmfree(pagetable_t pagetable);
 pagetable_t uvmcreate(void);
+void uvmunmap(pagetable_t, uint64, uint64, int);
 
 // string.c
 void* memset(void*, int, uint);
