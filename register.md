@@ -18,6 +18,10 @@ sepc寄存器主要用于异常处理过程中的上下文保存和恢复。当�
 
 需要注意的是，sepc寄存器是针对特权级别的，即针对监管者（Supervisor）模式的异常。在不同的特权级别下，可能会有类似功能的寄存器，如机器级别的mepc寄存器（Machine Exception Program Counter）和用户级别的uepc寄存器（User Exception Program Counter），用于保存不同特权级别下的异常发生时的指令地址。
 
+## medeleg
+想用ecall就得设置这个medeleg，将所有的traps都代理到s-mode中。他是一个64位寄存器，每一位bit都映射了mcause寄存器的异常code位。
+一旦bit为true就表示代理这个异常code
+
 # 指令
 ## ecall
 调用完后会产生trap，会跳到存在stvec中指向的指令

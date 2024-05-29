@@ -13,7 +13,7 @@ extern char trampoline[];
 
 struct cpu cpus[NCPU];
 
-struct proc PROC[NPROC];
+struct proc proc[NPROC];
 
 // a user program that calls exec("/init")
 // od -t xC initcode
@@ -30,7 +30,7 @@ uchar initcode[] = {
 void forkret(void);
 
 static struct proc* allocproc() {
-    struct proc *p = &PROC[0];
+    struct proc *p = &proc[0];
 
     // 开始配置一个proc
     // 分配一个proc id
@@ -55,7 +55,7 @@ static struct proc* allocproc() {
 void procinit() {
     printf("procinit\n");
 
-    struct proc *p = &PROC[0];
+    struct proc *p = &proc[0];
 
     // 初始化一个proc的栈,先给一个高位的虚拟地址,后续再改
     char *pa = kalloc();
@@ -86,7 +86,7 @@ void userinit() {
 void scheduler() {
     printf("scheduler\n");
 
-    struct proc *p = &PROC[0];
+    struct proc *p = &proc[0];
 
     struct cpu *cpu = mycpu();
 

@@ -69,6 +69,12 @@ w_mstatus(uint64 x) {
 }
 
 
+static inline void 
+w_medeleg(uint64 x)
+{
+  asm volatile("csrw medeleg, %0" : : "r" (x));
+}
+
 // Supervisor Status Register, sstatus
 
 #define SSTATUS_SPP (1L << 8) // Previous mode, 1=s, 0=u
