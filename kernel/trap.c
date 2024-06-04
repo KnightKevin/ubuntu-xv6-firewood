@@ -10,11 +10,15 @@ extern char userret[];
 
 extern char uservec[];
 
+extern int devintr();
+
 // handle an interrupt, exception, or system call from user space.
 // called from trampoline.S
 // s-mode
 void usertrap() {
     printf("usertrap\n");
+
+    int which_dev = 0;
 
     // 判断是否来自u-mode
     if ((r_sstatus() & SSTATUS_SPP) != 0) {
@@ -25,6 +29,10 @@ void usertrap() {
 
     if (r_scause() == 8) {
         printf("sys call\n");
+
+        intr_on();
+    } else if((which_dev = devintr()) != 0){
+        // ok
     } else {
         printf("usertrap(): unexpected scause %p pid=%d\n", r_scause(), p->pid);
         printf("            sepc=%p stval=%p\n", r_sepc(), r_stval());
@@ -66,3 +74,10 @@ void usertrapret(void) {
 
 }
 
+
+int devintr() {
+    // todo
+    printf("todo: devintr");
+
+    return 0;
+}
