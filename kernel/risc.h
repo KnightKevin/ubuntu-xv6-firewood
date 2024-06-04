@@ -113,3 +113,29 @@ static inline void
 w_stvec(uint64 x) {
     asm volatile("csrw stvec, %0" : : "r" (x));
 }
+
+
+static inline uint64
+r_scause() {
+    uint64 x;
+    asm volatile("csrr %0,scause" : "=r" (x));
+
+    return x;
+}
+
+
+static inline uint64
+r_sepc() {
+    uint64 x;
+    asm volatile("csrr %0,sepc" : "=r" (x));
+
+    return x;
+}
+
+static inline uint64
+r_stval() {
+    uint64 x;
+    asm volatile("csrr %0,stval" : "=r" (x));
+
+    return x;
+}

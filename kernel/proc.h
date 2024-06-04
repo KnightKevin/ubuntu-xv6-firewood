@@ -29,6 +29,7 @@ struct proc {
     struct context context;
     struct trapframe *trapframe;
     uint64 sz;
+    int killed;
 };
 
 struct cpu {

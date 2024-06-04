@@ -14,7 +14,22 @@ extern char uservec[];
 // called from trampoline.S
 // s-mode
 void usertrap() {
-    printf("usertrap");
+    printf("usertrap\n");
+
+    // 判断是否来自u-mode
+    if ((r_sstatus() & SSTATUS_SPP) != 0) {
+        panic("usertrap: not from user mode");
+    }
+
+    struct proc *p = myproc();
+
+    if (r_scause() == 8) {
+        printf("sys call\n");
+    } else {
+        printf("usertrap(): unexpected scause %p pid=%d\n", r_scause(), p->pid);
+        printf("            sepc=%p stval=%p\n", r_sepc(), r_stval());
+        p->killed = 1;
+    }
 }
 
 void usertrapret(void) {
