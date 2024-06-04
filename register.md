@@ -22,8 +22,21 @@ sepc寄存器主要用于异常处理过程中的上下文保存和恢复。当�
 想用ecall就得设置这个medeleg，将所有的traps都代理到s-mode中。他是一个64位寄存器，每一位bit都映射了mcause寄存器的异常code位。
 一旦bit为true就表示代理这个异常code
 
+## sscratch
+在RISC-V体系结构中，`sscratch` 是一个在监管模式（Supervisor Mode）下使用的寄存器。它通常用于保存一个指向本地监管上下文的地址。当hart（硬件线程）执行用户代码时，`sscratch` 可以被用来存储这个地址。在trap（中断或异常）处理开始时，`sscratch` 会与用户寄存器交换，提供一个初始的工作寄存器。简而言之，`sscratch` 是一个用于在发生trap时保存和恢复上下文的寄存器。
+
+在u-mode和s-mode互相转换时用于保存一个值（这个值一般指向一个地址，而这个地址里面存了他们各自须要的寄存器值）
+
 # 指令
 ## ecall
 调用完后会产生trap，会跳到存在stvec中指向的指令
 a7-调用编号
 stvec-用于
+
+## ld
+从内存中获取双字数据到目标寄存器
+`ld rd, offset(rs)`
+
+## csrrw
+交换t0与csr寄存器的值
+`csrrw t0 mstatus t0`

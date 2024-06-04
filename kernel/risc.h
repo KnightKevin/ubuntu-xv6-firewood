@@ -42,6 +42,13 @@ w_satp(uint64 satp) {
     asm volatile("csrw satp, %0" : : "r" (satp));
 }
 
+static inline uint64
+r_satp() {
+    uint64 x;
+    asm volatile("csrr %0, satp" : "=r" (x));
+    return x;
+}
+
 static inline void
 sfence_vma() {
     asm volatile("sfence.vma zero, zero");

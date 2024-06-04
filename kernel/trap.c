@@ -32,7 +32,10 @@ void usertrapret(void) {
 
     struct proc *p = myproc();
 
-    p->trapframe->kernel_satp = (uint64) usertrap;
+    uint64 kernel_satp = r_satp();
+    p->trapframe->kernel_satp = kernel_satp;
+    p->trapframe->kernel_sp = p->kstack + PGSIZE;
+    p->trapframe->kernel_trap = (uint64) usertrap;
 
 
     uint64 satp = MAKE_SATP(p->pagetable);

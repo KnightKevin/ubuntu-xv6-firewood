@@ -2,31 +2,45 @@
 .section trampsec
 
 .global trampoline
-.global userret
 
 trampoline:
 .align 4
 .global uservec
 uservec:
     # todo save user registers in TRAPFRAME
-    li t0,234
+    
 
     # todo restore kernel stack pointer from p->trapframe->kernel_sp
 
     
     # jump to usertrap(), which does not return
-    jr t0;
+    csrrw a0, sscratch, a0
 
+
+    ld t1, 0(a0)
+    ld sp, 8(a0)
+    ld t0, 16(a0)
+
+
+    csrw satp, t1
+    sfence.vma zero, zero
+
+    jr t0
+
+.global userret
 userret:
     # userret(TRAPFRAME, pagetable)
     # switch kernel to user.
     # usertrapret calls here.
     # a0: TRAPFRAME, in user page table
     # a1: user pagetable for user use
+
+
     csrw satp, a1
     sfence.vma zero, zero
 
-    li sp, 0x1000
+    csrw sscratch, a0
+
     # ecall 0x0000000000000014
-    # 0x0000003ffffff00e
+    # 0x0000003ffffff022
     sret
