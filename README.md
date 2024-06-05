@@ -65,3 +65,4 @@
 - [x] 为什么调用ecall没有跳转到stvec所指定的指令地址，根据mcause来看貌似是Load access fault，scause貌似是Instruction address misaligned.可以将源码修改成我写的样子，看哪一步出错了————要配置medeleg寄存器，须要将所有中断和异常委托给s-mode（默认是m-mode）
 - [x] 为什么proc结构体中的trapframe要用指针
 - [ ] usertrap()待实现
+- [ ] 没理解defs.h中的NELEM(x)什么意思

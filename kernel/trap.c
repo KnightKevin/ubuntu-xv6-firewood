@@ -28,9 +28,8 @@ void usertrap() {
     struct proc *p = myproc();
 
     if (r_scause() == 8) {
-        printf("sys call\n");
-
         intr_on();
+        syscall();
     } else if((which_dev = devintr()) != 0){
         // ok
     } else {

@@ -22,6 +22,9 @@ uservec:
     ld t0, 16(a0)
 
 
+    sd a7, 168(a0)
+
+
     csrw satp, t1
     sfence.vma zero, zero
 

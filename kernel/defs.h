@@ -46,3 +46,10 @@ void swtch(struct context *old, struct context *new);
 
 // trap.c
 void usertrapret(void);
+
+// syscall.c
+void syscall();
+
+
+// todo number of elements in fixed-size array
+#define NELEM(x) (sizeof(x)/sizeof((x)[0]))

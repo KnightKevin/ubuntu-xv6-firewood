@@ -14,7 +14,9 @@ OBJS = \
 	$K/proc.o \
 	$K/swtch.o \
 	$K/trap.o \
-	$K/trampoline.o
+	$K/trampoline.o \
+	$K/syscall.o \
+	$K/sysfile.o
 
 QEMU = qemu-system-riscv64
 

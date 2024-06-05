@@ -22,6 +22,7 @@ struct context {
 
 struct proc {
     int pid;
+    char name[16];
     pagetable_t pagetable;
     uint64 kstack;
 
