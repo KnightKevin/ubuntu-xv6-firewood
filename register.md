@@ -37,6 +37,11 @@ stvec-用于
 从内存中获取双字数据到目标寄存器
 `ld rd, offset(rs)`
 
+## sd
+将一个64位的双字（doubleword）从寄存器存储到内存中
+`sd rs2, offset(rs1)`
+将寄存器 rs2 中的64位数据存储到内存地址 rs1 + offset 中
+
 ## csrrw
 交换t0与csr寄存器的值
 `csrrw t0 mstatus t0`

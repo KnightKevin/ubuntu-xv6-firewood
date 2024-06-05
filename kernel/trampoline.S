@@ -21,7 +21,7 @@ uservec:
     ld sp, 8(a0)
     ld t0, 16(a0)
 
-
+    # 须要将u-mode中的寄存器存到proc中的trapframe
     sd a7, 168(a0)
 
 
