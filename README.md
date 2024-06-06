@@ -66,3 +66,4 @@
 - [x] 为什么proc结构体中的trapframe要用指针
 - [ ] usertrap()待实现
 - [ ] 没理解defs.h中的NELEM(x)什么意思
+- [ ] 须要了解elf文件格式了，因为exec()须要从硬盘中获取elf格式的数据了

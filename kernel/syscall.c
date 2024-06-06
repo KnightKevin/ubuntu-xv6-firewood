@@ -4,6 +4,16 @@
 #include "defs.h"
 #include "syscall.h"
 
+int argstr(int n, uint64 *ip) {
+    // todo
+    return -1;
+}
+
+int argaddr(int n, char *buf, int max) {
+    // todo
+    return -1;
+}
+
 extern uint64 sys_exec(void);
 
 static uint64 (*syscalls[])(void) = {

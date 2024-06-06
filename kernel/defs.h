@@ -49,6 +49,8 @@ void usertrapret(void);
 
 // syscall.c
 void syscall();
+int argint(int, int*);
+int argstr(int, char*, int);
 
 
 // todo number of elements in fixed-size array
