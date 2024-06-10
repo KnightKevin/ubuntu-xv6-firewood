@@ -34,3 +34,11 @@ void memmove(void *dst, const void *src, uint n) {
         n--;
     }
 }
+
+int strlen(const char *s)
+{
+    int n;
+    for (n=0;s[n];n++)
+    ;
+    return n;
+}

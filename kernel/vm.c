@@ -148,3 +148,13 @@ pagetable_t uvmcreate() {
     memset(pagetable, 0, PGSIZE);
     return pagetable;
 }
+
+
+// Copy a null-terminated string from user space to kernel.
+// Copy bytes to dst from virtual address srcva in a given page table, until a '\0', or max.
+// Return 0 on success, -1 on error.
+int copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
+{
+    // todo
+    return -1;
+}

@@ -27,10 +27,12 @@ void uvminit(pagetable_t pagetable, uchar *src, uint sz);
 void uvmfree(pagetable_t pagetable);
 pagetable_t uvmcreate(void);
 void uvmunmap(pagetable_t, uint64, uint64, int);
+int copyinstr(pagetable_t, char *, uint64, uint64);
 
 // string.c
 void* memset(void*, int, uint);
 void memmove(void *dst, const void *src, uint n);
+int strlen(const char*);
 
 // proc.c
 int cpuid(void);
@@ -51,6 +53,8 @@ void usertrapret(void);
 void syscall();
 int argint(int, int*);
 int argstr(int, char*, int);
+int argaddr(int, uint64 *);
+int fetchstr(uint64, char*, int);
 
 
 // todo number of elements in fixed-size array
