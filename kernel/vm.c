@@ -155,6 +155,6 @@ pagetable_t uvmcreate() {
 // Return 0 on success, -1 on error.
 int copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
 {
-    // todo
+    // todo 要考虑数据会跨多个页的情况
     return -1;
 }
