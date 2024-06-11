@@ -55,7 +55,7 @@ int argstr(int n, char *buff, int max) {
     if (argaddr(n, &addr) < 0) {
         return -1;
     }
-    return -1;
+    return fetchstr(addr, buff, max);
 }
 
 

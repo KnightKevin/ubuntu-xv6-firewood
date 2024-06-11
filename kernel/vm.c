@@ -149,12 +149,73 @@ pagetable_t uvmcreate() {
     return pagetable;
 }
 
+uint64 walkaddr(pagetable_t pagetable, uint64 va) {
+    pte_t *pte;
+    pte = walk(pagetable, va, 0);
+
+    if (pte == 0) {
+        return 0;
+    }
+
+    if ((*pte & PTE_V) == 0) {
+        return 0;
+    }
+
+    if ((*pte & PTE_U) == 0) {
+        return 0;
+    }
+    return PTE2PA(pte);
+}
+
 
 // Copy a null-terminated string from user space to kernel.
 // Copy bytes to dst from virtual address srcva in a given page table, until a '\0', or max.
 // Return 0 on success, -1 on error.
 int copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
 {
-    // todo 要考虑数据会跨多个页的情况
-    return -1;
+    int got_null=0;
+    int n;
+       
+
+    while (got_null == 0 && max > 0) {
+
+        uint64 va = PGROUNDDOWN(srcva);
+
+        n = PGSIZE - (srcva-va);
+        if (n > max) {
+            n = max;
+        }
+        
+        uint64 pa = walkaddr(pagetable, va);
+
+        if (pa <= 0) {
+            return -1;
+        }
+
+        char *p = (char *)(pa + (srcva - va));
+
+        while (n > 0) {
+            if (*p == '\0') {
+                *dst = '\0';
+                got_null = 1;
+                break;
+            } else {
+                *dst = *p;
+            }
+
+            dst++;
+            p++;
+            n--;
+            max--;
+        }
+
+        srcva = va + PGSIZE;
+    }
+    
+    
+    if (got_null) {
+        return 0;
+    } else {
+        return -1;
+    }
 }
