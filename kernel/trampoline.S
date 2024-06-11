@@ -19,10 +19,16 @@ uservec:
 
     ld t1, 0(a0)
     ld sp, 8(a0)
-    ld t0, 16(a0)
 
     # 须要将u-mode中的寄存器存到proc中的trapframe
     sd a7, 168(a0)
+
+    csrr t0, sscratch
+
+    // save to proc->trapframe->a0
+    sd t0, 112(a0)
+
+    ld t0, 16(a0)
 
 
     csrw satp, t1

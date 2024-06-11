@@ -164,7 +164,7 @@ uint64 walkaddr(pagetable_t pagetable, uint64 va) {
     if ((*pte & PTE_U) == 0) {
         return 0;
     }
-    return PTE2PA(pte);
+    return PTE2PA(*pte);
 }
 
 
