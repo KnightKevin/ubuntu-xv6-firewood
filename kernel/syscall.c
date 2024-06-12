@@ -27,8 +27,8 @@ static uint64 argraw(int n) {
     {
     case 0:
         return p->trapframe->a0;
-    // case 1:
-    //     return p->trapframe->a1;
+    case 1:
+        return p->trapframe->a1;
     // case 2:
     //     return p->trapframe->a2;
     // case 3:

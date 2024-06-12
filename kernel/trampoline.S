@@ -21,7 +21,9 @@ uservec:
     ld sp, 8(a0)
 
     # 须要将u-mode中的寄存器存到proc中的trapframe
+    sd a1, 120(a0)
     sd a7, 168(a0)
+    
 
     csrr t0, sscratch
 
@@ -47,6 +49,8 @@ userret:
 
     csrw satp, a1
     sfence.vma zero, zero
+
+    
 
     csrw sscratch, a0
 

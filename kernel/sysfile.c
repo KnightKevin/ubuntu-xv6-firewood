@@ -18,9 +18,9 @@ uint64 sys_exec(void) {
 
 
     // int i;
-    // uint64 uargv, uarg;
+    uint64 uargv;
 
-    if (argstr(0, path, MAXPATH) < 0) {
+    if (argstr(0, path, MAXPATH) < 0 || argaddr(1, &uargv) < 0) {
         return -1;
     }
 
