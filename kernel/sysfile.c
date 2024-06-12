@@ -13,8 +13,7 @@ uint64 sys_exec(void) {
     printf("syscall sys_exec\n");
 
     // 获取path，argv（用户从控制台输入的命令字符串和若干个参数）
-    // char path[MAXPATH], *argv[MAXARG];
-    char path[MAXPATH];
+    char path[MAXPATH], *argv[MAXARG];
 
 
     // int i;
@@ -23,6 +22,8 @@ uint64 sys_exec(void) {
     if (argstr(0, path, MAXPATH) < 0 || argaddr(1, &uargv) < 0) {
         return -1;
     }
+
+    memset(argv, 0, sizeof(argv));
 
     // todo
 
