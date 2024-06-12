@@ -219,3 +219,13 @@ int copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
         return -1;
     }
 }
+
+
+// Copy from user space to kernel;
+// Copy len bytes to dst from virtual address srcva in a given page table.
+// return 0 on success, -1 on error
+int copyin(pagetable_t pagetable, char *dst, uint64 srcva, uint64 len)
+{
+    // todo
+    return 0;
+}

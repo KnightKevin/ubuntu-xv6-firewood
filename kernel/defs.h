@@ -28,6 +28,7 @@ void uvmfree(pagetable_t pagetable);
 pagetable_t uvmcreate(void);
 void uvmunmap(pagetable_t, uint64, uint64, int);
 int copyinstr(pagetable_t, char *, uint64, uint64);
+int copyin(pagetable_t, char *, uint64, uint64);
 uint64 walkaddr(pagetable_t, uint64);
 
 // string.c
@@ -56,6 +57,7 @@ int argint(int, int*);
 int argstr(int, char*, int);
 int argaddr(int, uint64 *);
 int fetchstr(uint64, char*, int);
+int fetchaddr(uint64, uint64*);
 
 
 // todo number of elements in fixed-size array

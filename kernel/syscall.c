@@ -4,6 +4,18 @@
 #include "defs.h"
 #include "syscall.h"
 
+int fetchaddr(uint64 addr, uint64 *ip) {
+    struct proc *p = myproc();
+    if (addr >= p->sz || addr+sizeof(uint64) > p->sz) {
+        return -1;
+    }
+
+    if (copyin(p->pagetable, (char *)ip, addr, sizeof(*ip)) != 0) {
+        return -1;
+    }
+
+    return 0;
+}
 
 // Fetch the null-terminated string at addr from the current process.
 // Return length of string, not including null, or -1 for error.
