@@ -18,7 +18,7 @@ uint64 sys_exec(void) {
 
 
     // int i;
-    uint64 uargv;
+    uint64 uargv, uarg;
 
     if (argstr(0, path, MAXPATH) < 0 || argaddr(1, &uargv) < 0) {
         return -1;
@@ -33,9 +33,14 @@ uint64 sys_exec(void) {
             goto bad;
         }
         
-        if (fetchaddr()) {
-
+        // 源码中是这样调用的fetchaddr(uargv+sizeof(uint64)*i, (uint64*)&uarg)。其中第二个参数
+        // (uint64*)&uarg是以这种方式来传的，其实&uarg本身就是(uiint64*)类型的指针了。
+        // 查了相关材料发现是为了代码可读性，让你一眼就看清楚这个参数需要什么类型的指针，
+        // 还有一个原因就是为了让某些编译器能通过编译，恰巧我这个编译器能编译通过。
+        if (fetchaddr(uargv + sizeof(uint64)*i, &uarg) < 0) {
+            goto bad;
         }
+
     }
 
     bad:

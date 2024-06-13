@@ -226,6 +226,30 @@ int copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
 // return 0 on success, -1 on error
 int copyin(pagetable_t pagetable, char *dst, uint64 srcva, uint64 len)
 {
-    // todo
+    uint64 n, va , pa;
+
+    while (len > 0) {
+        va = PGROUNDDOWN(srcva);
+
+        pa = walkaddr(pagetable, va);
+
+        if (pa <= 0) {
+            return -1;
+        }
+
+        n = PGSIZE - (srcva -va);
+
+        if (n >= len) {
+            n = len;
+        }
+
+        memmove(dst, (void *)(pa + (srcva - va)), n);
+
+        len -= n;
+        dst+=n;
+        srcva = va + PGSIZE;
+    }
+
+
     return 0;
 }
