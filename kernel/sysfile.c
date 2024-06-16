@@ -41,7 +41,28 @@ uint64 sys_exec(void) {
             goto bad;
         }
 
+        if (uarg == 0) {
+            argv[i] = 0;
+            break;
+        }
+
+        argv[i] = kalloc();
+        if (argv[i] == 0) {
+            goto bad;
+        }
+
+        if (fetchstr(uarg, argv[i], PGSIZE) < 0) {
+            goto bad;
+        }
+
     }
+    int ret = exec(path, argv);
+
+    for(i = 0;i < NELEM(argv) && argv[i] != 0; i++) {
+        kfree(argv[i]);
+    }
+
+    return ret;
 
     bad:
         for(i = 0;i < NELEM(argv) && argv[i] != 0; i++) {

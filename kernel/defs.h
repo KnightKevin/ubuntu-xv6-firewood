@@ -5,6 +5,9 @@
 void consoleinit(void);
 void consputc(char c);
 
+// exec.c
+int exec(char*, char**);
+
 // uart.c
 void uartinit(void);
 void uartputc_sync(char c);
@@ -59,6 +62,15 @@ int argaddr(int, uint64 *);
 int fetchstr(uint64, char*, int);
 int fetchaddr(uint64, uint64*);
 
+// log.c
+void begin_op(void);
+void end_op(void);
 
-// todo number of elements in fixed-size array
+// file.c
+
+// fs.c
+struct inode* namei(char*);
+
+
+// number of elements in fixed-size array
 #define NELEM(x) (sizeof(x)/sizeof((x)[0]))

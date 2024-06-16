@@ -16,7 +16,10 @@ OBJS = \
 	$K/trap.o \
 	$K/trampoline.o \
 	$K/syscall.o \
-	$K/sysfile.o
+	$K/sysfile.o \
+	$K/exec.o \
+	$K/fs.o \
+	$K/log.o
 
 QEMU = qemu-system-riscv64
 
