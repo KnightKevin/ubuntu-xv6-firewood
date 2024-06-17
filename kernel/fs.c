@@ -5,6 +5,7 @@
 #include "param.h"
 #include "file.h"
 #include "fs.h"
+#include "buf.h"
 
 struct {
     // todo struct spinlock lock;
@@ -12,6 +13,36 @@ struct {
 } icache;
 
 static struct inode* iget(uint dev, uint inum);
+
+
+// Return the disk block address of the nth block in inode ip.
+static uint bmap(struct inode *ip, uint n)
+{  
+    panic("bmap: out of range");
+
+}
+
+
+// Read data from inode.
+// If user_dest ==1, then dst is user virtual address,otherwise, dst is kernel address.
+//off: offset
+//n: elf byte size
+int readi(struct inode *ip, int user_dst, uint64 dst, uint off, uint n)
+{
+    struct buf *bp;
+    if (off > ip->size) {
+        return 0;
+    }
+
+    if (off +n > ip->size) {
+        n = ip->size - off;
+    }
+
+    // todo for
+    bp =bread(ip->dev, bmap(ip, off/BSIZE));
+    return -1;
+}
+
 
 // Find the inode with number inum and deivce dev
 // and return the in-memory copy. Does not lock

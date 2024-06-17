@@ -1,6 +1,9 @@
 // 参考xv6的目录分布
 #include "types.h"
 
+// bio.c
+struct buf* bread(uint, uint);
+
 // console.c
 void consoleinit(void);
 void consputc(char c);
@@ -70,6 +73,7 @@ void end_op(void);
 
 // fs.c
 struct inode* namei(char*);
+int readi(struct inode*, int, uint64, uint, uint);
 
 
 // number of elements in fixed-size array

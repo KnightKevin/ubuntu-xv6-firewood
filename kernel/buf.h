@@ -1,0 +1,3 @@
+struct buf {
+    int valid;
+};

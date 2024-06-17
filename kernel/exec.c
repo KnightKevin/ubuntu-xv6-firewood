@@ -5,11 +5,13 @@
 #include "syscall.h"
 #include "param.h"
 #include "file.h"
+#include "elf.h"
 
 int exec(char *path, char **argv) {
     printf("kernel exec()\n");
 
     struct inode *ip;
+    struct elfhdr elf;
 
     begin_op();
 
@@ -18,8 +20,12 @@ int exec(char *path, char **argv) {
         return -1;
     }
 
-    printf("asdfasd");
+    // Check ELF header
+    if (readi(ip, 0, &elf, 0, sizeof(elf)) != sizeof(elf)) {
+        goto bad;
+    }
 
-
+    bad:
+        panic("exec error!");
     return -1;
 }
