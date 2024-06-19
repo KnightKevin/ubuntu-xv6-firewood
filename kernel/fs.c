@@ -38,6 +38,11 @@ int readi(struct inode *ip, int user_dst, uint64 dst, uint off, uint n)
         n = ip->size - off;
     }
 
+
+    // 先根据offset获取到它在inode.addr[]中的inode number（bmmap()）
+    // 再拿到inode.addr[block number]中的值，这个值是数据block地址（也是也是个block number）
+    // bread根据block number，去block cache中取对应块的缓存buf,若没有就创建一个buf，并从磁盘中读取数据到这个buf中
+
     // todo for
     bp =bread(ip->dev, bmap(ip, off/BSIZE));
     return -1;
