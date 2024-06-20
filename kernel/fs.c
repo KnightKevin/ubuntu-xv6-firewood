@@ -17,6 +17,7 @@ struct {
 
 static struct inode* iget(uint dev, uint inum);
 
+// 从这个设备的位图中获取一个未使用的bit。根据这个bit计算出空闲的block number
 // allocate a zeroed disk block.
 static uint balloc(uint dev) {
 
@@ -29,9 +30,13 @@ static uint balloc(uint dev) {
 
     struct buf *bp;
     bp = 0;
-    // 遍历每个block
+    // 目前这个磁盘只有一个位图，b永远等于0，如果以后这个磁盘更大了，一块位图肯定不够了
+    // 从第一个block开始找
     for (b=0; b < sb.size; b += BPB) {
+        // 读取这个block所在的位图数据,目前磁盘太小，所以这个位图的块号永远事0
         bp = bread(dev, BBLOCK(b, sb));
+        // bi%8 就是要拿出这个byte的哪个一个bit来参与运算
+        // 开始遍历位图数据，从0位开始，第一个为0的位停下来
     }
 
 
