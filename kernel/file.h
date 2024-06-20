@@ -6,4 +6,6 @@ struct inode {
     uint size;
 
     int valid; // inode has been read from disk?
+
+    uint addrs[NDIRECT + 1];
 };

@@ -17,6 +17,8 @@ void main() {
     procinit();
     userinit();
 
+    binit();
+
 
     scheduler();
 

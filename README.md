@@ -67,4 +67,5 @@
 - [ ] usertrap()待实现
 - [ ] 没理解defs.h中的NELEM(x)什么意思
 - [ ] 须要了解elf文件格式了，因为exec()须要从硬盘中获取elf格式的数据了
-- [ ] inode.address[12+1] 十二（怎么有的地方说11个）个直接索引，外加一个简介索引，如果文件大小超过了12k，那么剩下的block number就放在间接索引中，这个索引有点儿特殊，它每4字节表示一个block number，一共256个
+- [x] direct block number是inode.addrs[]的索引！！！！！！！
+- [ ] inode.address[12+1] 十二（怎么有的地方说11个）个直接索引，外加一个简介索引，如果文件占用超过了12个direct inode number，那么剩下的block number就放在indirect inode block number中，inode.arrress[indirect inode number]指向一个data block，它每4字节表示一个block number，一共256个

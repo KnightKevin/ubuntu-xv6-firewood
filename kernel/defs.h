@@ -3,6 +3,7 @@
 
 // bio.c
 struct buf* bread(uint, uint);
+void binit(void);
 
 // console.c
 void consoleinit(void);
