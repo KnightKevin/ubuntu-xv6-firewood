@@ -26,7 +26,7 @@ static uint balloc(uint dev) {
     sb.size = 1024*1024;
     sb.bmapstart = 44;
 
-    int b;
+    int b, bi, m;
 
     struct buf *bp;
     bp = 0;
@@ -37,6 +37,21 @@ static uint balloc(uint dev) {
         bp = bread(dev, BBLOCK(b, sb));
         // bi%8 就是要拿出这个byte的哪个一个bit来参与运算
         // 开始遍历位图数据，从0位开始，第一个为0的位停下来
+
+        for (bi = 0; b < BPB; b++) {
+            m = 1 << (b%8);
+            if ((bp->data[b/8] & m) == 0) {
+                bp->data[b/8] |= m; // Mark block in use.
+                // todo log_write(bp);
+                // todo brelse(bp);
+                // todo bzero(dev, b + bi);
+                return b +bi; // 后面再仔细想想为什么要这么做
+            }
+        }
+        
+        // todo brelse(bp);
+        panic("balloc: out of blocks");
+
     }
 
 

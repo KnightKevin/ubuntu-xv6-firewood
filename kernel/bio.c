@@ -71,6 +71,7 @@ struct buf* bread(uint dev, uint blockno)
 
     if (!b->valid) {
         // 从磁盘中读取数据到buf中
+        // 参考 https://blog.csdn.net/qq_45226456/article/details/133583975
         // todo virtio_disk_rw(b, 0);
         b->valid = 1;
     }
