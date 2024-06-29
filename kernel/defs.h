@@ -76,6 +76,9 @@ void end_op(void);
 struct inode* namei(char*);
 int readi(struct inode*, int, uint64, uint, uint);
 
+// virtio_disk.c
+void virtio_disk_init(void);
+
 
 // number of elements in fixed-size array
 #define NELEM(x) (sizeof(x)/sizeof((x)[0]))

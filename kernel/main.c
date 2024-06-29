@@ -19,6 +19,8 @@ void main() {
 
     binit();
 
+    virtio_disk_init();
+
 
     scheduler();
 

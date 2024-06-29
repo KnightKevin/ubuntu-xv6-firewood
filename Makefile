@@ -19,7 +19,9 @@ OBJS = \
 	$K/sysfile.o \
 	$K/exec.o \
 	$K/fs.o \
-	$K/log.o
+	$K/log.o \
+	$K/bio.o \
+	$K/virtio_disk.o
 
 QEMU = qemu-system-riscv64
 

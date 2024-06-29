@@ -2,6 +2,7 @@
 #include "risc.h"
 #include "proc.h"
 #include "defs.h"
+#include "fs.h"
 #include "buf.h"
 #include "param.h"
 
@@ -19,7 +20,7 @@ void binit()
     bcache.head.next = &bcache.head;
     bcache.head.prev = &bcache.head;
 
-    for (b = bcache.buf; b < &bcache.buf+NBUF; b++) {
+    for (b = bcache.buf; b < bcache.buf+NBUF; b++) {
         b->next = bcache.head.next;
         b->prev = &bcache.head;
         // todo initsleeplock(&b->lock, "buffer");
@@ -38,7 +39,7 @@ static struct buf* bget(uint dev, uint blockno)
 
     // todo acquire(&bcache.lock);
     for (b = bcache.head.next; b != &bcache.head; b = b->next) {
-        if (b->dev == dev, b->blockno == blockno) {
+        if (b->dev == dev && b->blockno == blockno) {
             b->refcnt++;
 
             // todo release(&bcache.lock);
@@ -61,6 +62,8 @@ static struct buf* bget(uint dev, uint blockno)
     }
 
     panic("bget: no buffers");
+
+    return 0;
 
 }
 

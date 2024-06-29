@@ -4,6 +4,7 @@
 #include "defs.h"
 #include "syscall.h"
 #include "param.h"
+#include "fs.h"
 #include "file.h"
 #include "elf.h"
 
@@ -21,7 +22,7 @@ int exec(char *path, char **argv) {
     }
 
     // Check ELF header
-    if (readi(ip, 0, &elf, 0, sizeof(elf)) != sizeof(elf)) {
+    if (readi(ip, 0, (uint64)&elf, 0, sizeof(elf)) != sizeof(elf)) {
         goto bad;
     }
 

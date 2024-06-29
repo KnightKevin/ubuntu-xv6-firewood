@@ -75,6 +75,7 @@ static uint bmap(struct inode *ip, uint bn)
     // todo bn >12 的处理
     panic("bmap: out of range");
 
+    return -1;
 }
 
 
@@ -100,6 +101,9 @@ int readi(struct inode *ip, int user_dst, uint64 dst, uint off, uint n)
 
     // todo for
     bp = bread(ip->dev, bmap(ip, off/BSIZE));
+
+    bp += 1;
+    
     return -1;
 }
 
