@@ -11,7 +11,8 @@
 // 向下取整
 #define PGROUNDDOWN(a) (((a)) & ~(PGSIZE-1))
 
-#define PGSIZE 4096 
+#define PGSIZE 4096
+#define PGSHIFT 12 // bits of offset within a page
 
 #define MAXVA (1L<<(9+9+9+12-1))
 

@@ -61,11 +61,12 @@
 - [ ] 需要掌握ecall的运行逻辑
 - [ ] 调用ecall会再次回到s-mode中，肯定要保护好切换前的现场（寄存器）
 - [ ] 记住哪些寄存器在发生中断的时候需要处理
-- [ ] s-mode再切换到u-mode的要了解处理现场的细节 
+- [x] s-mode再切换到u-mode的要了解处理现场的细节 
 - [x] 为什么调用ecall没有跳转到stvec所指定的指令地址，根据mcause来看貌似是Load access fault，scause貌似是Instruction address misaligned.可以将源码修改成我写的样子，看哪一步出错了————要配置medeleg寄存器，须要将所有中断和异常委托给s-mode（默认是m-mode）
 - [x] 为什么proc结构体中的trapframe要用指针
 - [ ] usertrap()待实现
-- [ ] 没理解defs.h中的NELEM(x)什么意思
+- [x] 没理解defs.h中的NELEM(x)什么意思 ---- 计算一个数组中的元素个数，这样就不用主动传数组大小了
 - [ ] 须要了解elf文件格式了，因为exec()须要从硬盘中获取elf格式的数据了
 - [x] direct block number是inode.addrs[]的索引！！！！！！！
-- [ ] inode.address[12+1] 十二（怎么有的地方说11个）个直接索引，外加一个简介索引，如果文件占用超过了12个direct inode number，那么剩下的block number就放在indirect inode block number中，inode.arrress[indirect inode number]指向一个data block，它每4字节表示一个block number，一共256个
+- [x] inode.address[12+1] 十二（怎么有的地方说11个）个直接索引，外加一个简介索引，如果文件占用超过了12个direct inode number，那么剩下的block number就放在indirect inode block number中，inode.arrress[indirect inode number]指向一个data block，它每4字节表示一个block number，一共256个
+- [ ] virtio_disk.c中 `*R(VIRTIO_MMIO_QUEUE_PFN) = ((uint64)disk.pages) >> PGSHIFT` 是什么意思
