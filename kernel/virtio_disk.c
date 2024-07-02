@@ -10,7 +10,10 @@
 
 static struct disk {
     char pages[2*PGSIZE];
-} disk;
+    struct VRingDesc *desc;
+    uint16 *avail;
+    struct UsedArea *used;
+} __attribute__ ((aligned (PGSIZE))) disk; // 让这个结构体16字节对齐
 
 void virtio_disk_init(void) {
 
@@ -93,10 +96,20 @@ void virtio_disk_init(void) {
         panic("virtio disk max queue too short.");
     }
 
+    // 在文档中等同于queue size概念
     *R(VIRTIO_MMIO_QUEUE_NUM) = NUM;
     memset(disk.pages, 0, sizeof(disk.pages));
 
+    // page frame number。用来告诉device virtio队列的物理帧号。
+    // virtio通常用环形缓冲区来进行数据传输，这个就是来告诉设备这个环形区域在物理内存哪儿
+    // 须要配合GUEST_PAGE_SIZE一起使用
+    // 最新的文档已经采用更新的技术替换pfn了，所以找不到详细的描述（怪不得我不知道为什么）
+    // 可以去找老版本的文档了
     *R(VIRTIO_MMIO_QUEUE_PFN) = ((uint64)disk.pages) >> PGSHIFT;
+
+    disk.desc = (struct VRingDesc *) disk.pages;
+    disk.avail = (uint16 *)(disk.pages + NUM*sizeof(struct VRingDesc));
+    disk.used = (struct UsedArea *)(disk.pages + PGSIZE);
 
                         
 

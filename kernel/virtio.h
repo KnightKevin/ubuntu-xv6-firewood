@@ -33,3 +33,27 @@
 // this many virtio descriptors.
 // must be a power of two.
 #define NUM 8
+
+
+struct VRingDesc {
+    uint64 addr;
+    uint32 len;
+    uint16 flags;
+    uint16 next;
+};
+
+#define VIRTQ_DESC_F_NEXT 1
+#define VIRTQ_DESC_F_WRITE 2
+
+struct VRingUsedElem {
+    uint32 id;
+    uint32 len;
+};
+
+struct UsedArea {
+    uint16 flags;
+    uint16 idx;
+    struct VRingUsedElem elems[NUM];
+    uint16 avail_event;
+};
+
