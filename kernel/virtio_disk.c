@@ -5,6 +5,8 @@
 #include "param.h"
 #include "memlayout.h"
 #include "virtio.h"
+#include "fs.h"
+#include "buf.h"
 
 #define R(r) ((volatile uint32 *)(VIRTIO0 + (r)))
 
@@ -13,6 +15,8 @@ static struct disk {
     struct VRingDesc *desc;
     uint16 *avail;
     struct UsedArea *used;
+
+    char free[NUM];
 } __attribute__ ((aligned (PGSIZE))) disk; // 让这个结构体16字节对齐
 
 void virtio_disk_init(void) {
@@ -111,7 +115,66 @@ void virtio_disk_init(void) {
     disk.avail = (uint16 *)(disk.pages + NUM*sizeof(struct VRingDesc));
     disk.used = (struct UsedArea *)(disk.pages + PGSIZE);
 
-                        
+    // todo free      
 
     printf("disk init\n");
+}
+
+
+static int alloc_desc()
+{
+    for (int i=0;i<NUM;i++) {
+        if (disk.free[i]) {
+            disk.free[i] = 0;
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+static int free_desc(int i)
+{
+    if (i >= NUM) {
+        panic("virtio_disk_intr 1");
+    }
+
+    if (disk.free[i]) {
+        panic("virtio_disk_intr 2");
+    }
+
+    disk.desc[i].addr = 0;
+    disk.free[i] = 1;
+// todo  wakeup(&disk.free[0]);
+}
+
+static int alloc3_desc(int *idx)
+{
+    for (int i=0;i<3;i++) {
+        idx[i] = alloc_desc();
+        if (idx[i] < 0) {
+           for (int j=0;j<i;j++) {
+                free_desc(idx[j]);
+           }
+
+           return -1;
+        }
+    }
+
+    return 0;
+}
+
+/**
+ * b: buf
+ * write: 0-read, 1-write
+ */
+void virtio_disk_rw(struct buf *b, int write) {
+    uint64 sector = b->blockno * (BSIZE/512);
+
+    int idx[3];
+    while(1) {
+        if (allo) {
+
+        }
+    }
 }

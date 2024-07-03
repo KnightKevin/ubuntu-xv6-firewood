@@ -78,6 +78,7 @@ int readi(struct inode*, int, uint64, uint, uint);
 
 // virtio_disk.c
 void virtio_disk_init(void);
+void virtio_disk_rw(struct buf *, int);
 
 
 // number of elements in fixed-size array
