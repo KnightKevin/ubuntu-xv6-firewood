@@ -1,7 +1,7 @@
 #define VIRTIO_MMIO_MAGIC_VALUE 0x000
 #define VIRTIO_MMIO_VERSION 0x004
 #define VIRTIO_MMIO_DEVICE_ID 0x008
-#define VIRTIO_MMIO_VENDOR_ID 0x00C
+#define VIRTIO_MMIO_VENDOR_ID 0x00c
 #define VIRTIO_MMIO_DEVICE_FEATURES 0x010
 #define VIRTIO_MMIO_DEVICE_FEATURES_SEL 0x014
 #define VIRTIO_MMIO_DRIVER_FEATURES 0x020
@@ -42,13 +42,17 @@ struct VRingDesc {
     uint16 next;
 };
 
-#define VIRTQ_DESC_F_NEXT 1
-#define VIRTQ_DESC_F_WRITE 2
+#define VRING_DESC_F_NEXT 1
+#define VRING_DESC_F_WRITE 2
 
 struct VRingUsedElem {
     uint32 id;
     uint32 len;
 };
+
+// for disk ops
+#define VIRTIO_BLK_T_IN 0
+#define VIRTIO_BLK_T_OUT 1
 
 struct UsedArea {
     uint16 flags;

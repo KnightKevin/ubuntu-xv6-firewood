@@ -17,14 +17,19 @@ static struct disk {
     struct UsedArea *used;
 
     char free[NUM];
+
+    struct {
+        struct buf *b;
+        char status;
+    } info[NUM];
 } __attribute__ ((aligned (PGSIZE))) disk; // 让这个结构体16字节对齐
 
 void virtio_disk_init(void) {
 
     // 验证设备是否正确
     if (*R(VIRTIO_MMIO_MAGIC_VALUE) != 0x74726976 ||
-        *R(VIRTIO_MMIO_VERSION) != 0x1 ||
-        *R(VIRTIO_MMIO_DEVICE_ID) != 0x0 ||
+        *R(VIRTIO_MMIO_VERSION) != 1 ||
+        *R(VIRTIO_MMIO_DEVICE_ID) != 2 ||
         *R(VIRTIO_MMIO_VENDOR_ID) != 0x554d4551
     ) {
         panic("could not find virtio disk!");
@@ -56,7 +61,7 @@ void virtio_disk_init(void) {
     // 4：VIRTIO_BLK_F_MQ(12) 表示设备支持多个虚拟队列，xv6中只使用了一个，默认的队列0
     // 5：VIRTIO_F_ANY_LAYOUT(27) 出于对旧版的兼容，表示设备和驱动之间对消息帧不做任何协商
     // 6：VIRTIO_RING_F_INDIRECT_DESC(28) 用于扩展descriptor数组到更大容量，由原本的一个队列
-    uint32 features = *R(VIRTIO_MMIO_DEVICE_FEATURES);
+    uint64 features = *R(VIRTIO_MMIO_DEVICE_FEATURES);
 
     features &= ~(1 << VIRTIO_BLK_F_RO);
     features &= ~(1 << VIRTIO_BLK_F_SCSI);
@@ -115,7 +120,9 @@ void virtio_disk_init(void) {
     disk.avail = (uint16 *)(disk.pages + NUM*sizeof(struct VRingDesc));
     disk.used = (struct UsedArea *)(disk.pages + PGSIZE);
 
-    // todo free      
+    for (int i = 0; i < NUM; i++) {
+        disk.free[i] = 1;
+    }
 
     printf("disk init\n");
 }
@@ -173,8 +180,49 @@ void virtio_disk_rw(struct buf *b, int write) {
 
     int idx[3];
     while(1) {
-        if (allo) {
-
+        if (alloc3_desc(idx) == 0) {
+            break;
         }
+
+        // sleep(&disk.free[0], &disk.vdisk_lock);
     }
+
+
+    struct virtio_blk_outhdr {
+        uint32 type;
+        uint32 reserved;
+        uint32 sector;
+    } buf0;
+
+    if (write) {
+        buf0.type = VIRTIO_BLK_T_OUT; // write
+    } else {
+        buf0.type = VIRTIO_BLK_T_IN; // read
+    }
+    buf0.reserved = 0;
+    buf0.sector = sector;
+
+    // 现在运行在kernel stack，但是device需要直接的物理地址所以需要转一下
+    disk.desc[idx[0]].addr = (uint64) kvmpa((uint64) &buf0);
+    disk.desc[idx[0]].len = sizeof(buf0);
+    disk.desc[idx[0]].flags = VRING_DESC_F_NEXT;
+    disk.desc[idx[0]].next = idx[1];
+
+    disk.desc[idx[1]].addr = (uint64) b->data;
+    disk.desc[idx[1]].len = BSIZE;
+    if (write) {
+        disk.desc[idx[1]].flags = 0; // device read b->data
+    } else {
+        disk.desc[idx[1]].flags = VRING_DESC_F_WRITE; // device write  b->data
+    }
+    disk.desc[idx[1]].flags |= VRING_DESC_F_NEXT;
+    disk.desc[idx[1]].next = idx[2];
+
+    disk.info[idx[0]].status = 0;
+    disk.desc[idx[2]].addr = (uint64) &disk.info[idx[0]].status;
+    disk.desc[idx[2]].len = 1;
+    disk.desc[idx[2]].flags = VRING_DESC_F_WRITE;
+    disk.desc[idx[2]].next = 0;
+
+    // todo continue...
 }

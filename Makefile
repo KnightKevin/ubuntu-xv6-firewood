@@ -39,14 +39,18 @@ GDBPORT = 25000
 
 QEMUGDB = -S -gdb tcp::25000
 
-QEMUOPTS = -kernel $K/kernel  -machine virt -bios none -m $(MEM) -smp $(CPUS) -nographic
-
+QEMUOPTS = -kernel $K/kernel  -machine virt -bios none -m $(MEM) -smp $(CPUS) -nographic 
+QEMUOPTS += -drive file=fs.img,if=none,format=raw,id=x0
+QEMUOPTS += -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0
 
 $K/kernel : $(OBJS)
 	@echo "build kernel"
 	$(LD) -T $K/kernel.ld -o $@ $^ 
 	$(OBJDUMP) -S $K/kernel > $K/kernel.asm
 	$(OBJDUMP) -t $K/kernel | sed '1,/SYMBOL TABLE:/d;s/ .* / /; /^$$/d' > $K/kernel.sym
+
+# fs.img: mkfs/mkfs README $(UEXTRA) $(UPROGS)
+# 	mkfs/mkfs fs.img README $(UEXTRA) $(UPROGS)
 
 
 .gdbinit: .gdbinit.tmpl-riscv
