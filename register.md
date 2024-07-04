@@ -28,6 +28,13 @@ sepc寄存器主要用于异常处理过程中的上下文保存和恢复。当�
 在u-mode和s-mode互相转换时用于保存一个值（这个值一般指向一个地址，而这个地址里面存了他们各自须要的寄存器值）
 
 # 指令
+(文档地址)[https://sourceware.org/binutils/docs/as/index.html]
+
+## addi
+将寄存器rs的值与立即数imm相加后存入rd中
+addi rd, rs, imm
+addi sp, sp, -256
+
 ## ecall
 调用完后会产生trap，会跳到存在stvec中指向的指令
 a7-调用编号

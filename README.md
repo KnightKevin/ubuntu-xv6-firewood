@@ -72,3 +72,4 @@
 - [ ] virtio_disk.c中 `*R(VIRTIO_MMIO_QUEUE_PFN) = ((uint64)disk.pages) >> PGSHIFT` 是什么意思
 - [ ] virtio种MMIO类型的transpot中queue size == queue num.
 - [ ] disk.desc[idx[0]].next = idx[1]; 为什么是指向这个idx[1]
+- [ ] kernelvec 为什么要用sret，暂时还不理解

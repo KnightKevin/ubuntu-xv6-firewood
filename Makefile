@@ -21,7 +21,8 @@ OBJS = \
 	$K/fs.o \
 	$K/log.o \
 	$K/bio.o \
-	$K/virtio_disk.o
+	$K/virtio_disk.o \
+	$K/kernelvec.o
 
 QEMU = qemu-system-riscv64
 

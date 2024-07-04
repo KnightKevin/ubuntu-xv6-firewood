@@ -12,6 +12,9 @@
 #define VIRTIO_MMIO_QUEUE_NUM 0x038 // size of current queue, write-only
 #define VIRTIO_MMIO_QUEUE_PFN 0x040 // physical page number for queue, read/write
 
+#define VIRTIO_MMIO_QUEUE_NOTIFY 0x050
+
+
 #define VIRTIO_MMIO_STATUS 0x070
 
 

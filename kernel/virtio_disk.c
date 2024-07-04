@@ -140,7 +140,7 @@ static int alloc_desc()
     return -1;
 }
 
-static int free_desc(int i)
+static void free_desc(int i)
 {
     if (i >= NUM) {
         panic("virtio_disk_intr 1");
@@ -224,5 +224,23 @@ void virtio_disk_rw(struct buf *b, int write) {
     disk.desc[idx[2]].flags = VRING_DESC_F_WRITE;
     disk.desc[idx[2]].next = 0;
 
-    // todo continue...
+    //struct virtq_avail {
+    //  #define VIRTQ_AVAIL_F_NO_INTERRUPT 1
+    //  le16 flags;
+    //  le16 idx;
+    //  le16 ring[ /* Queue Size */ ];
+    //  le16 used_event; /* Only if VIRTIO_F_EVENT_IDX */
+    // };
+    // 下面这三步就是在操作环形队列，disk.avail[1]是一个计数器（默认为0），表示当前有几个有用的ring entry,
+    // 由于disk.avail[2]是一个rang[queue size]的数组，如果要用让他形成环那么在存值的时候就需要用(已用的size % 数组size)
+    // 来操作索引。比如当前已经用了1个entry，那么第二个entry的索引在哪里呢，就是（1%8）= 1
+    disk.avail[2 + (disk.avail[1] % NUM)] = idx[0];
+    __sync_synchronize(); // 告诉编译器前后后两个指令不要代码顺序优化，我这里要保持顺序
+    disk.avail[1] = disk.avail[1] + 1;
+
+    // write a queue index to this register notifies the device 
+    // that there are new buffers to process in the queue
+    *R(VIRTIO_MMIO_QUEUE_NOTIFY) = 0x0;
+
+
 }

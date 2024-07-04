@@ -10,6 +10,9 @@ extern char userret[];
 
 extern char uservec[];
 
+// in kernelvec.S, calls kerneltrap().
+void kernelvec();
+
 extern int devintr();
 
 // handle an interrupt, exception, or system call from user space.
@@ -24,6 +27,11 @@ void usertrap() {
     if ((r_sstatus() & SSTATUS_SPP) != 0) {
         panic("usertrap: not from user mode");
     }
+
+    // send interrupts and exceptions to kerneltrap(),
+    // since we're now in the kernel
+    // 将trap的处理入口便会kerneltrap，因为我们现在已经再kernel里面了
+    w_stvec((uint64) kernelvec);
 
     struct proc *p = myproc();
 
@@ -73,10 +81,19 @@ void usertrapret(void) {
 
 }
 
+void trapinithart() {
+    w_stvec((uint64) kernelvec);
+}
+
 
 int devintr() {
     // todo
     printf("todo: devintr");
 
     return 0;
+}
+
+
+void kerneltrap() {
+    printf("kerneltrap\n");
 }

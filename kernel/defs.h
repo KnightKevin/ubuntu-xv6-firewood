@@ -58,6 +58,7 @@ void swtch(struct context *old, struct context *new);
 
 // trap.c
 void usertrapret(void);
+void trapinithart(void);
 
 // syscall.c
 void syscall();

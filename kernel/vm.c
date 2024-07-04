@@ -39,28 +39,6 @@ void kvminithart() {
     sfence_vma();
 }
 
-// translate a kernel virtual address to 
-// a physical address. only needed for
-// adresses on the stack.
-// assumes va is page aligned
-uint64 kvmpa(uint64 va) {
-
-    uint64 off = va % PGSIZE;
-
-    pte_t *pte = walk(kernel_pagetable, va, 0);
-    if (pte == 0) {
-        panic("kvmpa!");
-    }
-
-    if ((*pte & PTE_V) == 0) {
-        panic("kvmpa!");
-    }
-
-    uint64 pa = PTE2PA(*pte);
-    // 这个pa是这个物理页的第一个地址，所以va对应的完整物理地址要加上offset
-    return pa + off;
-}
-
 /**
  * 根据va找到pagetable中的pte（叶子pte/0级pte）地址！！！！！，
  * alloc非0表示会生成必要的page table信息,注意！！！只构建必要的paget table。
@@ -104,6 +82,28 @@ void kvmmap(uint64 va, uint64 pa, uint64 sz, int perm) {
     if (mappages(kernel_pagetable, va, sz, pa, perm) != 0) {
         printf("page fault!");
     }
+}
+
+// translate a kernel virtual address to 
+// a physical address. only needed for
+// adresses on the stack.
+// assumes va is page aligned
+uint64 kvmpa(uint64 va) {
+
+    uint64 off = va % PGSIZE;
+
+    pte_t *pte = walk(kernel_pagetable, va, 0);
+    if (pte == 0) {
+        panic("kvmpa!");
+    }
+
+    if ((*pte & PTE_V) == 0) {
+        panic("kvmpa!");
+    }
+
+    uint64 pa = PTE2PA(*pte);
+    // 这个pa是这个物理页的第一个地址，所以va对应的完整物理地址要加上offset
+    return pa + off;
 }
 
 // 0 success,-1 walk() can not allocate a needed page-table page
