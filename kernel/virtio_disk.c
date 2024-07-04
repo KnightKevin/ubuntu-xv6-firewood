@@ -76,6 +76,10 @@ void virtio_disk_init(void) {
     status |= VIRTIO_CONFIG_S_FEATURES_OK;
     *R(VIRTIO_MMIO_STATUS) = status;
 
+    // tell device we're completely ready
+    status |= VIRTIO_CONFIG_S_DRIVER_OK;
+    *R(VIRTIO_MMIO_STATUS) = status;
+
     status = *R(VIRTIO_MMIO_STATUS);
 
     if (!(status & VIRTIO_CONFIG_S_FEATURES_OK)) {
@@ -94,7 +98,7 @@ void virtio_disk_init(void) {
     // 6：写寄存器组：QueueDescLow/QueueDescHigh, QueueDriverLow/QueueDriverHigh and QueueDeviceLow/QueueDeviceHigh分别写入Descriptor Table Available Ring和Used Ring的64位地址。
     // 7：向QueueReady寄存器写1。准备完毕。
 
-    *R(VIRTIO_MMIO_QUEUE_SEL) = 0x0;
+    *R(VIRTIO_MMIO_QUEUE_SEL) = 0;
 
     uint32 max = *R(VIRTIO_MMIO_QUEUE_NUM_MAX);
     if (max <= 0) {
@@ -191,7 +195,7 @@ void virtio_disk_rw(struct buf *b, int write) {
     struct virtio_blk_outhdr {
         uint32 type;
         uint32 reserved;
-        uint32 sector;
+        uint64 sector;
     } buf0;
 
     if (write) {
@@ -243,7 +247,7 @@ void virtio_disk_rw(struct buf *b, int write) {
 
     // write a queue index to this register notifies the device 
     // that there are new buffers to process in the queue
-    *R(VIRTIO_MMIO_QUEUE_NOTIFY) = 0x0;
+    *R(VIRTIO_MMIO_QUEUE_NOTIFY) = 0;
 
     while (b->disk == 1) {
         // todo sleep()
