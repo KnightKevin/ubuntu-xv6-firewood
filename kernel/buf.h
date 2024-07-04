@@ -1,5 +1,6 @@
 struct buf {
     int valid;
+    int disk; // does disk 'own' buf?
     uint dev;
     uint blockno;
     uint refcnt;

@@ -224,6 +224,9 @@ void virtio_disk_rw(struct buf *b, int write) {
     disk.desc[idx[2]].flags = VRING_DESC_F_WRITE;
     disk.desc[idx[2]].next = 0;
 
+    // 做一个标记，为1表示还没有操作完，等到virtio_disk_intr()处理完就是变成了0
+    b->disk = 1;
+
     //struct virtq_avail {
     //  #define VIRTQ_AVAIL_F_NO_INTERRUPT 1
     //  le16 flags;
@@ -241,6 +244,16 @@ void virtio_disk_rw(struct buf *b, int write) {
     // write a queue index to this register notifies the device 
     // that there are new buffers to process in the queue
     *R(VIRTIO_MMIO_QUEUE_NOTIFY) = 0x0;
+
+    while (b->disk == 1) {
+        // todo sleep()
+        // printf("sleep...\n");
+    }
+
+    printf("virtio end!");
+
+    // todo 执行到这表示磁盘读写已经完成了，改释放一些资源了
+    
 
 
 }
