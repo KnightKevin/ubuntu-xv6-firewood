@@ -49,9 +49,11 @@ int cpuid(void);
 void procinit(void);
 void userinit(void);
 void scheduler(void);
+void sched(void);
 struct cpu* mycpu(void);
 struct proc* myproc(void);
 pagetable_t proc_pagetable(struct proc *p);
+void sleep(void*, struct spinlock*);
 
 // swtch.S
 void swtch(struct context *old, struct context *new);

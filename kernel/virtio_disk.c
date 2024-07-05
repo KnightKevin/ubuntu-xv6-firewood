@@ -1,6 +1,7 @@
 #include "types.h"
 #include "risc.h"
 #include "proc.h"
+#include "spinlock.h"
 #include "defs.h"
 #include "param.h"
 #include "memlayout.h"
@@ -22,6 +23,8 @@ static struct disk {
         struct buf *b;
         char status;
     } info[NUM];
+
+    struct spinlock vdisk_lock;
 } __attribute__ ((aligned (PGSIZE))) disk; // 让这个结构体16字节对齐
 
 void virtio_disk_init(void) {
@@ -245,13 +248,21 @@ void virtio_disk_rw(struct buf *b, int write) {
     __sync_synchronize(); // 告诉编译器前后后两个指令不要代码顺序优化，我这里要保持顺序
     disk.avail[1] = disk.avail[1] + 1;
 
+    // 判断中断是否打开
+    uint64 sstatus = r_sstatus();
+    if (!(sstatus & SSTATUS_SIE)) {
+        panic("s-mode 中断未打开");
+    }
+
+    
+
     // write a queue index to this register notifies the device 
     // that there are new buffers to process in the queue
     *R(VIRTIO_MMIO_QUEUE_NOTIFY) = 0;
 
+
     while (b->disk == 1) {
-        // todo sleep()
-        // printf("sleep...\n");
+        sleep(b, &disk.vdisk_lock);
     }
 
     printf("virtio end!");

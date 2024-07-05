@@ -1,10 +1,12 @@
+#include "stdarg.h"
 #include "types.h"
 #include "risc.h"
 #include "proc.h"
 #include "defs.h"
 
 // print to the console.
-void printf(char *fmt, ...) {
+void printf(char *fmt, ...) 
+{
     // 循环后去每个字符
 
     int i;

@@ -1,6 +1,7 @@
 #include "types.h"
 #include "risc.h"
 #include "proc.h"
+#include "spinlock.h"
 #include "defs.h"
 #include "memlayout.h"
 
@@ -160,3 +161,20 @@ pagetable_t proc_pagetable(struct proc *p) {
 
     return pagetable;
 }
+
+
+void sleep(void *chan, struct spinlock *lk)
+{
+    // todo sleep 暂时从源码搬过来了，还未了解为什么
+    printf("sleep start");
+    sched();
+
+}
+
+void sched() {
+    // todo 还没弄懂这是在干啥
+    struct proc *p = myproc();
+
+    swtch(&p->context, &mycpu()->context);
+
+} 

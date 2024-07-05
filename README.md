@@ -70,6 +70,9 @@
 - [x] direct block number是inode.addrs[]的索引！！！！！！！
 - [x] inode.address[12+1] 十二（怎么有的地方说11个）个直接索引，外加一个简介索引，如果文件占用超过了12个direct inode number，那么剩下的block number就放在indirect inode block number中，inode.arrress[indirect inode number]指向一个data block，它每4字节表示一个block number，一共256个
 - [ ] virtio_disk.c中 `*R(VIRTIO_MMIO_QUEUE_PFN) = ((uint64)disk.pages) >> PGSHIFT` 是什么意思
-- [ ] virtio种MMIO类型的transpot中queue size == queue num.
-- [ ] disk.desc[idx[0]].next = idx[1]; 为什么是指向这个idx[1]
+- [x] virtio种MMIO类型的transpot中queue size == queue num.
+- [x] disk.desc[idx[0]].next = idx[1]; 为什么是指向这个idx[1]
 - [ ] kernelvec 为什么要用sret，暂时还不理解
+- [ ] printf()要支持占位符，打印数字
+- [ ] 发送了磁盘操作通知到设备了，可是还是没有走进trap中，发现是我没有sleep，可能须要先实现sleep了
+- [ ] scheduler须要将功能写完
