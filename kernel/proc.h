@@ -20,9 +20,12 @@ struct context {
 
 };
 
+enum procstate {UNUSED, SLEEPING, RUNNABLE, RUNNING, ZOMBIE};
+
 struct proc {
     int pid;
     char name[16];
+    enum procstate state;
     pagetable_t pagetable;
     uint64 kstack;
 

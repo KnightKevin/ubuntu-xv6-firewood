@@ -248,13 +248,9 @@ void virtio_disk_rw(struct buf *b, int write) {
     __sync_synchronize(); // 告诉编译器前后后两个指令不要代码顺序优化，我这里要保持顺序
     disk.avail[1] = disk.avail[1] + 1;
 
-    // 判断中断是否打开
-    uint64 sstatus = r_sstatus();
-    if (!(sstatus & SSTATUS_SIE)) {
-        panic("s-mode 中断未打开");
-    }
 
-    
+
+
 
     // write a queue index to this register notifies the device 
     // that there are new buffers to process in the queue

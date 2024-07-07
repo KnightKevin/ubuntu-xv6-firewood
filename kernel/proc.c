@@ -85,6 +85,7 @@ void userinit() {
     // 将一个二进制程序放入对应的pagetable中
     uvminit(p->pagetable, initcode, sizeof(initcode));
     p->sz = PGSIZE;
+    p->state = RUNNABLE;
     
 
 }
@@ -93,19 +94,34 @@ void userinit() {
 void scheduler() {
     printf("scheduler\n");
 
-    struct proc *p = &proc[0];
-
     struct cpu *cpu = mycpu();
+    struct proc *p;
+    for (;;) {
 
+        int found = 0;
+        for (p=proc; p<&proc[NPROC]; p++) {
+            if (p->state == RUNNABLE) {
+                p->state = RUNNING;
+                // 将这个proc分配给cpu
+                cpu->p = p;
 
-    // 将这个proc分配给cpu
-    cpu->p = p;
+                swtch(&cpu->context, &p->context);
 
+                // proc执行完后需要重置cpu的proc
+                cpu->p = 0;
 
-    swtch(&cpu->context, &p->context);
+                found = 1;
+            }
 
-    // proc执行完后需要重置cpu的proc
-    cpu->p = 0;
+            intr_on();
+        }
+
+        if (found == 0) {
+            // intr_on();
+            // todo why
+            asm volatile("wfi");
+        }
+    }
 }
 
 
@@ -167,6 +183,8 @@ void sleep(void *chan, struct spinlock *lk)
 {
     // todo sleep 暂时从源码搬过来了，还未了解为什么
     printf("sleep start");
+  intr_on();
+
     sched();
 
 }

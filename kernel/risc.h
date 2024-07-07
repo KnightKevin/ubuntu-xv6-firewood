@@ -147,3 +147,16 @@ intr_on()
 {
   w_sstatus(r_sstatus() | SSTATUS_SIE);
 }
+
+// disable device interrupts
+static inline void
+intr_off()
+{
+  w_sstatus(r_sstatus() & (~SSTATUS_SIE));
+}
+
+static inline int
+intr_get()
+{
+  return (r_sstatus() & SSTATUS_SIE) != 0;
+}
