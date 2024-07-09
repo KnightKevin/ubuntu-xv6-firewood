@@ -17,7 +17,7 @@ void main() {
     kvminithart();   // turn on paging
     procinit();
     trapinithart();
-    // plicinit();
+    plicinit();
     binit();
     virtio_disk_init();
     userinit();
