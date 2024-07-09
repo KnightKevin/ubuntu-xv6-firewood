@@ -89,12 +89,29 @@ void trapinithart() {
 
 int devintr() {
     // todo
-    printf("todo: devintr");
+    printf("todo: devintr\n");
 
     return 0;
 }
 
 
 void kerneltrap() {
-    printf("kerneltrap\n");
+    int which_dev = 0;
+    uint64 sepc = r_sepc();
+    uint64 sstatus = r_sstatus();
+    uint64 scause = r_scause();
+
+    if ((sstatus & SSTATUS_SPP) == 0) {
+        panic("kerneltrap: not from s-mode");
+    }
+
+    if (intr_get() != 0) {
+        panic("kerneltrap: interrupts enabled!");
+    }
+
+    if ((which_dev = devintr()) == 0 ) {
+        printf("scasue %p\n", scause);
+        printf("sepc=%p stval=%p\n", sepc, r_stval());
+        panic("kerneltrap");
+    }
 }

@@ -43,3 +43,7 @@ int strlen(const char *s)
     ;
     return n;
 }
+
+// char *strcat(char *s1, char * s2) {
+
+// }

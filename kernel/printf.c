@@ -5,12 +5,23 @@
 #include "spinlock.h"
 #include "defs.h"
 
+void printint(int xx, int base, int sign) {
+
+}
+
 // print to the console.
 void printf(char *fmt, ...) 
 {
+
+
+    va_list ap;
     // 循环后去每个字符
 
+
+
+
     int i;
+    va_start(ap, fmt);
 
     for (i=0;fmt[i]!=0;i++) {
         char c = fmt[i];
@@ -19,6 +30,19 @@ void printf(char *fmt, ...)
         if (c != '%') {
             consputc(c);
             continue;
+        }
+
+        c = fmt[++i] & 0xff;
+        switch(c){
+            case 'd':
+                printint(va_arg(ap, int), 10, 1);
+                break;
+            default:
+                consputc(c);
+                consputc(' ');
+                panic("can't be parse!");
+
+
         }
     }
 }
