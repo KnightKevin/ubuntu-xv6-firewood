@@ -85,3 +85,4 @@
 dtc -I dtb -O dts -o virt.dts virt.dtb
 ```
 - [ ] 没搞懂plic中的interrupt enable内存映射，说是配置s-mode hart的enable，但是base+2080却是m-mode下的内存映射（手册上面写的）
+- [ ] http://www.hzhcontrols.com/new-1650693.html 这个网址提供的文档截图貌似是对的，他的base+2080就是hart0 s-mode enable地址
