@@ -1,6 +1,7 @@
 #include "types.h"
 #include "risc.h"
 #include "proc.h"
+#include "spinlock.h"
 #include "defs.h"
 
 void main() {
@@ -16,6 +17,7 @@ void main() {
     kvminithart();   // turn on paging
     procinit();
     trapinithart();
+    // plicinit();
     binit();
     virtio_disk_init();
     userinit();

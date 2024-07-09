@@ -33,7 +33,7 @@ OBJDUMP = riscv64-linux-gnu-objdump
 
 CFLAGS = -Wall -Werror -O -fno-omit-frame-pointer -ggdb -DSOL_UTIL -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -mno-relax -I. -fno-stack-protector -fno-pie -no-pie
 
-CPUS = 1
+CPUS = 2
 MEM = 128M
 
 GDBPORT = 25000
@@ -42,7 +42,9 @@ QEMUGDB = -S -gdb tcp::25000
 
 QEMUOPTS = -kernel $K/kernel  -machine virt -bios none -m $(MEM) -smp $(CPUS) -nographic 
 QEMUOPTS += -drive file=fs.img,if=none,format=raw,id=x0
-QEMUOPTS += -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0
+QEMUOPTS += -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0 
+
+
 
 $K/kernel : $(OBJS)
 	@echo "build kernel"
@@ -68,3 +70,7 @@ qemu-gdb: kernel/kernel .gdbinit
 
 gdb: .gdbinit
 	riscv64-unknown-elf-gdb -x $<
+
+# 导出设备树,方便查看设备的内存映射，中断号等等
+qemu-dt: kernel/kernel
+	$(QEMU) $(QEMUOPTS) -machine dumpdtb=virt.dtb

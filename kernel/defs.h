@@ -1,5 +1,6 @@
 // 参考xv6的目录分布
 #include "types.h"
+#include "spinlock.h"
 
 // bio.c
 struct buf* bread(uint, uint);
@@ -24,6 +25,10 @@ void panic(char*);
 void kinit(void);
 void kfree(void *pa);
 void* kalloc(void);
+
+// plic.c
+void plicinit(void);
+void plicinithart(void);
 
 // vm.c
 void kvminit(void);

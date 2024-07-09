@@ -78,3 +78,10 @@
 - [ ] scheduler须要将功能写完
 - [ ] scheduler中asm volatile("wfi");是干什么的
 - [ ] 我发现我无法收到virtio出发的中断是因为我没有配置对应的PLIC，这是一个管理外部设备中断的东西，需要看对应主板的说明，如果不配置的话就无法收到这些设备的中断！
+- [ ] 查询设备的内存分布可以导出qemu的内存树查看，命令为
+```shell
+# if don't have dtc command
+# apt-get install device-tree-compiler 
+dtc -I dtb -O dts -o virt.dts virt.dtb
+```
+- [ ] 没搞懂plic中的interrupt enable内存映射，说是配置s-mode hart的enable，但是base+2080却是m-mode下的内存映射（手册上面写的）

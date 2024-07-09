@@ -1,6 +1,7 @@
 #include "types.h"
 #include "risc.h"
 #include "proc.h"
+#include "spinlock.h"
 #include "defs.h"
 
 void* memset(void *dst, int c, uint n) {
