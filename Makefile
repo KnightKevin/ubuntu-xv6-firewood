@@ -34,7 +34,7 @@ OBJDUMP = riscv64-linux-gnu-objdump
 
 CFLAGS = -Wall -Werror -O -fno-omit-frame-pointer -ggdb -DSOL_UTIL -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -mno-relax -I. -fno-stack-protector -fno-pie -no-pie
 
-CPUS = 2
+CPUS = 1
 MEM = 128M
 
 GDBPORT = 25000

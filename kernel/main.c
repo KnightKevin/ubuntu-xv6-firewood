@@ -18,6 +18,7 @@ void main() {
     procinit();
     trapinithart();
     plicinit();
+    plicinithart();
     binit();
     virtio_disk_init();
     userinit();

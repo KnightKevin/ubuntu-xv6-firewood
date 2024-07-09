@@ -10,6 +10,7 @@ void plicinit(void) {
 
 void plicinithart(void) {
     int hart = cpuid();
-    
-    
+    *((uint32 *)PLIC_SENABLE(hart)) = 1 << VIRTIO_IRQ;
+
+    *((uint32 *)PLIC_SPRIORITY(hart)) = 0;
 }
