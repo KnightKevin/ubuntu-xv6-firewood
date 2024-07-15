@@ -256,9 +256,13 @@ void virtio_disk_rw(struct buf *b, int write) {
     // that there are new buffers to process in the queue
     *R(VIRTIO_MMIO_QUEUE_NOTIFY) = 0;
 
+    
+    // todo 暂时先这样写，后面记得删掉
+    intr_on();
 
     while (b->disk == 1) {
-        sleep(b, &disk.vdisk_lock);
+        // todo sleep(b, &disk.vdisk_lock);
+
     }
 
     printf("virtio end!");
