@@ -26,6 +26,8 @@ void kvminit() {
 
     kvmmap(VIRTIO0, VIRTIO0, PGSIZE, PTE_R|PTE_W);
 
+    kvmmap(PLIC, PLIC, 0x400000, PTE_R|PTE_W);
+
     // map kernel text executable and read-only.
     kvmmap(KERNBASE, KERNBASE, (uint64)etext-KERNBASE, PTE_R | PTE_X);
 
