@@ -19,3 +19,14 @@ void plicinithart(void) {
     printf("fffff: %d\n", PLIC_SPRIORITY(hart)) ;
 
 }
+
+int plic_claim() {
+    int hart = cpuid();
+    int irq = *(uint32*)PLIC_SCLAIM(hart);
+    return irq;
+}
+
+void plic_complete(int irq) {
+    int hart = cpuid();
+    *(uint32*)PLIC_SCLAIM(hart) = irq;
+}

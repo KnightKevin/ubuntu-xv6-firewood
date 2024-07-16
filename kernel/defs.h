@@ -29,6 +29,8 @@ void* kalloc(void);
 // plic.c
 void plicinit(void);
 void plicinithart(void);
+int plic_claim(void);
+void plic_complete(int);
 
 // vm.c
 void kvminit(void);
@@ -88,6 +90,7 @@ int readi(struct inode*, int, uint64, uint, uint);
 // virtio_disk.c
 void virtio_disk_init(void);
 void virtio_disk_rw(struct buf *, int);
+void virtio_disk_intr(void);
 
 
 // number of elements in fixed-size array

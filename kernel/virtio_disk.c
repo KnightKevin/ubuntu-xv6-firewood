@@ -247,23 +247,6 @@ void virtio_disk_rw(struct buf *b, int write) {
     // 做一个标记，为1表示还没有操作完，等到virtio_disk_intr()处理完就是变成了0
     b->disk = 1;
 
-    printf("disk.desc[idx[0]].addr:%p\n", disk.desc[idx[0]].addr);
-    printf("disk.desc[idx[0]].len:%d\n", disk.desc[idx[0]].len);
-    printf("disk.desc[idx[0]].flags:%d\n", disk.desc[idx[0]].flags);
-    printf("disk.desc[idx[0]].next:%d\n\n", disk.desc[idx[0]].next);
-
-
-    printf("disk.desc[idx[1]].addr:%p\n", disk.desc[idx[1]].addr);
-    printf("disk.desc[idx[1]].len:%d\n", disk.desc[idx[1]].len);
-    printf("disk.desc[idx[1]].flags:%d\n", disk.desc[idx[1]].flags);
-    printf("disk.desc[idx[1]].next:%d\n\n", disk.desc[idx[1]].next);
-
-    printf("disk.desc[idx[2]].addr:%p\n", disk.desc[idx[2]].addr);
-    printf("disk.desc[idx[2]].len:%d\n", disk.desc[idx[2]].len);
-    printf("disk.desc[idx[2]].flags:%d\n", disk.desc[idx[2]].flags);
-    printf("disk.desc[idx[2]].next:%d\n", disk.desc[idx[2]].next);
-
-
     //struct virtq_avail {
     //  #define VIRTQ_AVAIL_F_NO_INTERRUPT 1
     //  le16 flags;
@@ -278,25 +261,13 @@ void virtio_disk_rw(struct buf *b, int write) {
     __sync_synchronize(); // 告诉编译器前后后两个指令不要代码顺序优化，我这里要保持顺序
     disk.avail[1] = disk.avail[1] + 1;
 
-    printf("disk.avail[0]:%d\n", disk.avail[0]);
-
-  printf("1. eip is enable : %d\n", intr_get());
-
-
     // write a queue index to this register notifies the device 
     // that there are new buffers to process in the queue
     *R(VIRTIO_MMIO_QUEUE_NOTIFY) = 0;
 
-  printf("queue notify register : %d\n", *R(VIRTIO_MMIO_QUEUE_NOTIFY));
-    printf("queue index: %d\n", *R(VIRTIO_MMIO_QUEUE_SEL));
-    printf("queue pfn: %p\n", *R(VIRTIO_MMIO_QUEUE_PFN));
-    printf("queue num: %p\n", *R(VIRTIO_MMIO_QUEUE_NUM));
-
-
 
     // todo 暂时先这样写，后面记得删掉
     intr_on();
-  printf("2. eip is enable : %d\n", intr_get());
 
     while (b->disk == 1) {
         // todo sleep(b, &disk.vdisk_lock);
@@ -309,4 +280,9 @@ void virtio_disk_rw(struct buf *b, int write) {
     
 
 
+}
+
+void virtio_disk_intr()
+{
+    printf("disk intr!!!!!\n");
 }

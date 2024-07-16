@@ -90,6 +90,25 @@ void trapinithart() {
 int devintr() {
     // todo
     printf("todo: devintr\n");
+    uint64 scause = r_scause();
+    if ((scause & 0x8000000000000000) && (scause&0xff) == 9) {
+        // 来着外部设备中断
+
+        // 先认领
+        int irq = plic_claim();
+        switch(irq) {
+            case VIRTIO_IRQ:
+                virtio_disk_intr();
+                break;
+            default:
+                printf("unexpected interrupt irq=%d", irq);
+                panic("\n");
+        }
+
+        // 告诉plic完成中断
+        plic_complete(irq);
+        return 1;
+    }
 
     return 0;
 }
