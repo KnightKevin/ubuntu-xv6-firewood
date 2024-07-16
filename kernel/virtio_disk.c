@@ -83,7 +83,11 @@ void virtio_disk_init(void) {
     status |= VIRTIO_CONFIG_S_DRIVER_OK;
     *R(VIRTIO_MMIO_STATUS) = status;
 
+  printf("status: %p\n", status);
+
+
     status = *R(VIRTIO_MMIO_STATUS);
+  printf("mmio status:%p\n", *R(VIRTIO_MMIO_STATUS));
 
     if (!(status & VIRTIO_CONFIG_S_FEATURES_OK)) {
         panic("virtio disk FEATURES_OK unset");
@@ -126,6 +130,11 @@ void virtio_disk_init(void) {
     disk.desc = (struct VRingDesc *) disk.pages;
     disk.avail = (uint16 *)(disk.pages + NUM*sizeof(struct VRingDesc));
     disk.used = (struct UsedArea *)(disk.pages + PGSIZE);
+
+
+      printf("disk.desc:%p\n", disk.desc);
+  printf("disk.avail:%p\n", disk.avail);
+  printf("disk.used:%p\n", disk.used);
 
     for (int i = 0; i < NUM; i++) {
         disk.free[i] = 1;
@@ -183,6 +192,10 @@ static int alloc3_desc(int *idx)
  * write: 0-read, 1-write
  */
 void virtio_disk_rw(struct buf *b, int write) {
+
+    // todo 记得改
+    intr_off();
+
     uint64 sector = b->blockno * (BSIZE/512);
 
     int idx[3];
@@ -265,17 +278,25 @@ void virtio_disk_rw(struct buf *b, int write) {
     __sync_synchronize(); // 告诉编译器前后后两个指令不要代码顺序优化，我这里要保持顺序
     disk.avail[1] = disk.avail[1] + 1;
 
+    printf("disk.avail[0]:%d\n", disk.avail[0]);
 
-
+  printf("1. eip is enable : %d\n", intr_get());
 
 
     // write a queue index to this register notifies the device 
     // that there are new buffers to process in the queue
     *R(VIRTIO_MMIO_QUEUE_NOTIFY) = 0;
 
-    
+  printf("queue notify register : %d\n", *R(VIRTIO_MMIO_QUEUE_NOTIFY));
+    printf("queue index: %d\n", *R(VIRTIO_MMIO_QUEUE_SEL));
+    printf("queue pfn: %p\n", *R(VIRTIO_MMIO_QUEUE_PFN));
+    printf("queue num: %p\n", *R(VIRTIO_MMIO_QUEUE_NUM));
+
+
+
     // todo 暂时先这样写，后面记得删掉
     intr_on();
+  printf("2. eip is enable : %d\n", intr_get());
 
     while (b->disk == 1) {
         // todo sleep(b, &disk.vdisk_lock);

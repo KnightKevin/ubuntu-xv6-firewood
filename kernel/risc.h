@@ -83,6 +83,12 @@ w_medeleg(uint64 x)
   asm volatile("csrw medeleg, %0" : : "r" (x));
 }
 
+static inline void 
+w_mideleg(uint64 x)
+{
+  asm volatile("csrw mideleg, %0" : : "r" (x));
+}
+
 // Supervisor Status Register, sstatus
 
 #define SSTATUS_SPP (1L << 8) // Previous mode, 1=s, 0=u
@@ -159,4 +165,21 @@ static inline int
 intr_get()
 {
   return (r_sstatus() & SSTATUS_SIE) != 0;
+}
+
+
+// s-mode interrupt enable
+#define SIE_SEIE (1L << 9) // externel interrupts
+#define SIE_STIE (1L << 5) // timer interrupts
+#define SIE_SSIE (1L << 1) // software interrupts
+
+
+static inline void w_sie(uint64 x) {
+    asm volatile("csrw sie, %0" : : "r" (x));
+}
+
+static inline uint64 r_sie() {
+    uint64 x;
+    asm volatile("csrr %0, sie" :  "=r" (x));
+    return x;
 }
