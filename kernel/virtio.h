@@ -61,6 +61,8 @@ struct VRingUsedElem {
 
 struct UsedArea {
     uint16 flags;
+    // idx field indicates where the driver would put the next descriptor entry in the ring (modulo the queue size).
+    // This starts at 0, and increases.
     uint16 idx;
     struct VRingUsedElem elems[NUM];
     uint16 avail_event;

@@ -17,8 +17,14 @@ static struct disk {
     uint16 *avail;
     struct UsedArea *used;
 
+    // 用于标记每个描述符是否空闲
     char free[NUM];
 
+    // we've looked this far in used[2..NUM].
+    // 跟踪已处理到的'used'环的索引位置。（比如上次处理到索引2，那么这个值就变成3）
+    uint16 used_idx;
+
+    // 用于记录飞行中的I/O操作的相关信息.通过描述连接的
     struct {
         struct buf *b;
         char status;
@@ -285,4 +291,11 @@ void virtio_disk_rw(struct buf *b, int write) {
 void virtio_disk_intr()
 {
     printf("disk intr!!!!!\n");
+
+    // todo think
+    while ((disk.used_idx%NUM) != (disk.used->idx % NUM)) {
+
+
+
+    }
 }
