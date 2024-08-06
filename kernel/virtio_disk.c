@@ -89,11 +89,7 @@ void virtio_disk_init(void) {
     status |= VIRTIO_CONFIG_S_DRIVER_OK;
     *R(VIRTIO_MMIO_STATUS) = status;
 
-  printf("status: %p\n", status);
-
-
     status = *R(VIRTIO_MMIO_STATUS);
-  printf("mmio status:%p\n", *R(VIRTIO_MMIO_STATUS));
 
     if (!(status & VIRTIO_CONFIG_S_FEATURES_OK)) {
         panic("virtio disk FEATURES_OK unset");
@@ -136,11 +132,6 @@ void virtio_disk_init(void) {
     disk.desc = (struct VRingDesc *) disk.pages;
     disk.avail = (uint16 *)(disk.pages + NUM*sizeof(struct VRingDesc));
     disk.used = (struct UsedArea *)(disk.pages + PGSIZE);
-
-
-      printf("disk.desc:%p\n", disk.desc);
-  printf("disk.avail:%p\n", disk.avail);
-  printf("disk.used:%p\n", disk.used);
 
     for (int i = 0; i < NUM; i++) {
         disk.free[i] = 1;
@@ -252,6 +243,7 @@ void virtio_disk_rw(struct buf *b, int write) {
 
     // 做一个标记，为1表示还没有操作完，等到virtio_disk_intr()处理完就是变成了0
     b->disk = 1;
+    disk.info[idx[0]].b = b;
 
     //struct virtq_avail {
     //  #define VIRTQ_AVAIL_F_NO_INTERRUPT 1
@@ -275,14 +267,16 @@ void virtio_disk_rw(struct buf *b, int write) {
     // todo 暂时先这样写，后面记得删掉
     intr_on();
 
+    printf("virtio process:");
     while (b->disk == 1) {
         // todo sleep(b, &disk.vdisk_lock);
-
+        printf(".");
     }
+    printf("\n");
 
-    printf("virtio end!");
+    printf("virtio end!\n");
 
-    // todo 执行到这表示磁盘读写已经完成了，改释放一些资源了
+    // todo 执行到这表示磁盘读写已经完成了，该释放一些资源了
     
 
 
@@ -290,12 +284,26 @@ void virtio_disk_rw(struct buf *b, int write) {
 
 void virtio_disk_intr()
 {
-    printf("disk intr!!!!!\n");
+      // todo acquire(&disk.vdisk_lock);
+
 
     // todo think
     while ((disk.used_idx%NUM) != (disk.used->idx % NUM)) {
+        int id = disk.used->elems[disk.used_idx].id;
 
+        if (disk.info[id].status != 0) {
+            panic("virtio_disk_intr status");
+        }
 
+        disk.info[id].b->disk = 0;
+
+        // todo wakeup(disk.info[id].b);
+
+        disk.used_idx = (disk.used_idx+1) % NUM;
 
     }
+
+    *R(VIRTIO_MMIO_INTERRUPT_ACK) = *R(VIRTIO_MMIO_INTERRUPT_STATUS) & 0x3;
+        // todo release(&disk.vdisk_lock);
+
 }
