@@ -1,6 +1,7 @@
 // 参考xv6的目录分布
 #include "types.h"
 #include "spinlock.h"
+#include "file.h"
 
 // bio.c
 struct buf* bread(uint, uint);
@@ -86,6 +87,7 @@ void end_op(void);
 // fs.c
 struct inode* namei(char*);
 int readi(struct inode*, int, uint64, uint, uint);
+struct inode* dirlookup(struct inode*, char*, uint*);
 
 // virtio_disk.c
 void virtio_disk_init(void);

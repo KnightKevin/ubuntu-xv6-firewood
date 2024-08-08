@@ -1,3 +1,7 @@
+#ifndef FS_H
+#define FS_H
+
+
 #define ROOTINO 1 // root i-number
 #define DIRSIZ 14
 
@@ -14,3 +18,15 @@ struct superblock {
     uint size; // size of file system image (blocks)
     uint bmapstart;
 };
+
+// Directory is a file containing a sequence of dirent structures.
+#define DIRSIZ 14
+
+
+struct dirent {
+    short inum;
+    char name[DIRSIZ];
+};
+
+#endif
+

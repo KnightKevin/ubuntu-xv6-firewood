@@ -68,6 +68,7 @@ static struct buf* bget(uint dev, uint blockno)
 
 }
 
+// 从磁盘设备中读取blockno的数据
 struct buf* bread(uint dev, uint blockno)
 {
     struct buf *b;

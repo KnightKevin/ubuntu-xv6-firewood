@@ -7,6 +7,7 @@
 #include "fs.h"
 #include "file.h"
 #include "buf.h"
+#include "stat.h"
 
 // there should be one superblock per disk device.
 struct superblock sb;
@@ -146,14 +147,77 @@ static struct inode* iget(uint dev, uint inum)
     return ip;
 }
 
+// 我也不知道怎么解释这个方法，注意name参数，他是获取第一个有效的目录名称
+// 第一个目录名称后面的目录结构（注意结果是不带'/'开始的字符串）
+// 若返回0，则表示没有目录/文件了
+// skipelem("/a/b/c")="b/c", setting name = "a"
+// skipelem("")=0, setting name = ""
+static char* skipelem(char* path, char *name)
+{
+    char *s;
+
+    int len;
+
+    while(*path == '/') {
+        path++;
+    }
+
+    if (*path == 0) {
+        return 0;
+    }
+
+    s = path;
+
+    while (*path != '/' && *path != 0) {
+        path++;
+    }
+
+    len = path - s;
+
+    // 修改name的值
+    if (len > DIRSIZ) {
+        memmove(name, s, DIRSIZ);
+    } else {
+        memmove(name, s, len);
+
+        // 一定要在末尾加一个0，不然就不是字符串了
+        name[len] = 0;
+    }
+
+    while(*path == '/') {
+        path++;
+    }
+
+    return path;
+    
+}
+
 static struct inode* namex(char *path, int nameiparent, char *name)
 {
-    struct inode *ip;
+    struct inode *ip, *next;
     if (*path == '/') {
         ip = iget(ROOTDEV, ROOTINO);
     } else {
         // todo
         ip = 0;
+    }
+
+    while ((path=skipelem(path, name))!=0) {
+
+        // todo 处理ip.type=1的处理
+
+        if (nameiparent && *path == '\0') {
+            // todo
+            return ip;
+        }
+
+        if ((next = dirlookup(ip, name, 0)) == 0) {
+            // todo iunlockput(ip);
+            return 0;
+        }
+
+        // todo iunlockput(ip);
+        ip = next;
     }
 
     return ip;
@@ -163,4 +227,29 @@ struct inode* namei(char *path)
 {
     char name[DIRSIZ];
     return namex(path, 0, name);
+}
+
+struct inode* dirlookup(struct inode *dp, char *name, uint *poff)
+{
+    // todo if (dp->type != T_DIR) {
+    //     panic("dirlookup not DIR");
+    // }
+
+    uint off;
+    struct dirent de;
+
+    for (off = 0; off < dp->size; off += sizeof(de)) {
+        if (readi(dp, 0, (uint64)&de, off, sizeof(de)) != sizeof(de)) {
+            panic("dirlookup read");
+        }
+
+        if (de.inum == 0) {
+            continue;
+        }
+
+        // todo
+
+    }
+
+    return 0;
 }
