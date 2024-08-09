@@ -82,6 +82,8 @@ static uint bmap(struct inode *ip, uint bn)
 
 
 // Read data from inode.
+// 将ip里面的数据读取到dst，可以选择从哪个偏移量off读取
+// 返回读取了多少字节数据，等于-1表示读取错误
 // If user_dest ==1, then dst is user virtual address,otherwise, dst is kernel address.
 //off: offset
 //n: elf byte size
@@ -103,6 +105,8 @@ int readi(struct inode *ip, int user_dst, uint64 dst, uint off, uint n)
 
     // todo for
     bp = bread(ip->dev, bmap(ip, off/BSIZE));
+
+    printf("bp: %s", bp->data);
 
     bp += 1;
     
