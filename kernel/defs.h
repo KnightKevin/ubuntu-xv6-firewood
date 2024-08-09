@@ -6,6 +6,7 @@
 // bio.c
 struct buf* bread(uint, uint);
 void binit(void);
+void brelse(struct buf*);
 
 // console.c
 void consoleinit(void);
@@ -88,6 +89,7 @@ void end_op(void);
 struct inode* namei(char*);
 int readi(struct inode*, int, uint64, uint, uint);
 struct inode* dirlookup(struct inode*, char*, uint*);
+void ilock(struct inode*);
 
 // virtio_disk.c
 void virtio_disk_init(void);

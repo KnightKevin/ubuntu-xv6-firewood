@@ -16,11 +16,29 @@
 
 struct superblock {
     uint size; // size of file system image (blocks)
+    uint ninodes;
     uint bmapstart;
+    uint inodestart;
 };
 
 // Directory is a file containing a sequence of dirent structures.
 #define DIRSIZ 14
+
+
+struct dinode {
+    short type;
+    short major;
+    short minor;
+    short nlink;
+    uint size;
+    uint addres[NDIRECT + 1];
+};
+
+// Inodes per block
+#define IPB (BSIZE / sizeof(struct dinode))
+
+// Block containing inode i
+#define IBLOCK(i, sb) ((i)/IPB + sb.inodestart)
 
 
 struct dirent {

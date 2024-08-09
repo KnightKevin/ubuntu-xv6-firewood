@@ -83,3 +83,9 @@ struct buf* bread(uint dev, uint blockno)
 
     return b;
 }
+
+
+void brelse(struct buf *buf)
+{
+    printf("todo brelse %p\n", buf);
+}

@@ -13,6 +13,9 @@ struct inode {
     int valid; // inode has been read from disk?
 
     short type;
+    short major;
+    short minor;
+    short nlink;
 
     // 这个inode拥有那些数据块block number。
     // 每个addrs[]里面存的是具体的block number

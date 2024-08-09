@@ -25,8 +25,8 @@ static uint balloc(uint dev) {
 
     // 遍历整个设备，找到一块没用的block
     // todo 由于目前还没有格式化过磁盘，所以暂时写死sb一些数据
-    sb.size = 1024*1024;
-    sb.bmapstart = 44;
+    sb.size = 1000;
+    sb.bmapstart = 45;
 
     int b, bi, m;
 
@@ -204,6 +204,10 @@ static struct inode* namex(char *path, int nameiparent, char *name)
 
     while ((path=skipelem(path, name))!=0) {
 
+        // lock the given inode.
+        // reads inode from disk if necessary.
+        ilock(ip);
+
         // todo 处理ip.type=1的处理
 
         if (nameiparent && *path == '\0') {
@@ -231,9 +235,9 @@ struct inode* namei(char *path)
 
 struct inode* dirlookup(struct inode *dp, char *name, uint *poff)
 {
-    // todo if (dp->type != T_DIR) {
-    //     panic("dirlookup not DIR");
-    // }
+    if (dp->type != T_DIR) {
+        panic("dirlookup not DIR");
+    }
 
     uint off;
     struct dirent de;
@@ -252,4 +256,43 @@ struct inode* dirlookup(struct inode *dp, char *name, uint *poff)
     }
 
     return 0;
+}
+
+// reads the inode from disk if necessary.
+void ilock(struct inode *ip)
+{
+
+    // todo 由于目前还没有格式化过磁盘，所以暂时写死sb一些数据
+    sb.ninodes = 200;
+    sb.inodestart = 32;
+
+    // todo
+    if (ip ==0 || ip->ref < 1) {
+        panic("ilock");
+    }
+
+    struct buf *bp;
+    struct dinode *dip;
+    // todo acquiresleep(&ip->lock);
+
+    // need to read inode from disk
+    if (ip->valid == 0) {
+        bp = bread(ip->dev, IBLOCK(ip->inum, sb));
+
+        dip = (struct dinode*)bp->data + (ip->inum%IPB);
+        ip->type = dip->type;
+        ip->major = dip->major;
+        ip->minor = dip->minor;
+        ip->nlink = dip->nlink;
+        ip->size = dip->size;
+        memmove(ip->addrs, dip->addres, sizeof(ip->addrs));
+        brelse(bp);
+        ip->valid = 1;
+        if (ip->type == 0) {
+            panic("ilock: no type\n");
+        }
+    }
+
+
+
 }
