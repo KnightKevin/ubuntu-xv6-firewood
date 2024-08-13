@@ -47,11 +47,13 @@ void uvmunmap(pagetable_t, uint64, uint64, int);
 int copyinstr(pagetable_t, char *, uint64, uint64);
 int copyin(pagetable_t, char *, uint64, uint64);
 uint64 walkaddr(pagetable_t, uint64);
+int copyout(pagetable_t, uint64, char *, uint64);
 
 // string.c
 void* memset(void*, int, uint);
 void memmove(void *dst, const void *src, uint n);
 int strlen(const char*);
+int strncmp(const char*, const char*, uint);
 
 // proc.c
 int cpuid(void);
@@ -63,6 +65,7 @@ struct cpu* mycpu(void);
 struct proc* myproc(void);
 pagetable_t proc_pagetable(struct proc *p);
 void sleep(void*, struct spinlock*);
+int either_copyout(int user_dst, uint64 dst, void *src, uint64 len);
 
 // swtch.S
 void swtch(struct context *old, struct context *new);
@@ -90,6 +93,7 @@ struct inode* namei(char*);
 int readi(struct inode*, int, uint64, uint, uint);
 struct inode* dirlookup(struct inode*, char*, uint*);
 void ilock(struct inode*);
+int namecmp(const char*, const char*);
 
 // virtio_disk.c
 void virtio_disk_init(void);

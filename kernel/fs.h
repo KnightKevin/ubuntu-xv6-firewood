@@ -42,7 +42,7 @@ struct dinode {
 
 
 struct dirent {
-    short inum;
+    ushort inum;
     char name[DIRSIZ];
 };
 

@@ -280,3 +280,12 @@ int copyin(pagetable_t pagetable, char *dst, uint64 srcva, uint64 len)
 
     return 0;
 }
+
+// Copy from kernel to user
+// Copy len bytes from src to virtual address dstva in a given page table.
+// return 0 on success, -1 on error
+int copyout(pagetable_t pagetable, uint64 dstva, char *src, uint64 len)
+{
+    panic("todo copyout()");
+    return -1;
+}

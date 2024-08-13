@@ -44,6 +44,16 @@ int strlen(const char *s)
     return n;
 }
 
-// char *strcat(char *s1, char * s2) {
+int strncmp(const char *s, const char *t, uint len) {
+    while (len > 0 && *s && *s == *t) {
+        len --;
+        s++;
+        t++;
+    }
 
-// }
+    if (len == 0) {
+        return 0;
+    }
+
+    return (uchar)*s - (uchar)*t;
+}

@@ -9,6 +9,8 @@
 #include "buf.h"
 #include "stat.h"
 
+#define min(a, b) ((a) < (b) ? (a) : (b))
+
 // there should be one superblock per disk device.
 struct superblock sb;
 
@@ -86,7 +88,7 @@ static uint bmap(struct inode *ip, uint bn)
 // 返回读取了多少字节数据，等于-1表示读取错误
 // If user_dest ==1, then dst is user virtual address,otherwise, dst is kernel address.
 //off: offset
-//n: elf byte size
+//n: 须要读取多少byte数据
 int readi(struct inode *ip, int user_dst, uint64 dst, uint off, uint n)
 {
     struct buf *bp;
@@ -103,14 +105,26 @@ int readi(struct inode *ip, int user_dst, uint64 dst, uint off, uint n)
     // 再拿到inode.addr[block number]中的值，这个值是数据block地址（也是也是个block number）
     // bread根据block number，去block cache中取对应块的缓存buf,若没有就创建一个buf，并从磁盘中读取数据到这个buf中
 
-    // todo for
-    bp = bread(ip->dev, bmap(ip, off/BSIZE));
+    // tot用于记录总共读取了多少byte
+    // m 用于记录每次从data里面读取了多少byte
+    int tot,m;
+    for (tot=0; tot < n; tot += m,off += m) {
+        bp = bread(ip->dev, bmap(ip, off/BSIZE));
 
-    printf("bp: %s", bp->data);
+        // if (off%BSIZE == 0) {
+        //     m = BSIZE;
+        // } else {
+        //     m = min(BSIZE - off, n-tot);
+        // }
+        // 这样写更简洁
+        m = min(n-tot, BSIZE - (off % BSIZE));
 
-    bp += 1;
+        either_copyout(user_dst, dst, bp->data + (off % BSIZE), m);
+        // todo brelse(bp);
+    }
+
+    return tot;
     
-    return -1;
 }
 
 
@@ -299,4 +313,9 @@ void ilock(struct inode *ip)
 
 
 
+}
+
+int namecmp(const char *s, const char *t)
+{
+    return strncmp(s, t, DIRSIZ);
 }

@@ -196,3 +196,20 @@ void sched() {
     swtch(&p->context, &mycpu()->context);
 
 } 
+
+// 将src的数据copy到dst中，dst的地址究竟是user address还是kernel address
+// 取决于user_dst：0-kernel  1-user
+// return 0 success, -1 error
+int either_copyout(int user_dst, uint64 dst, void *src, uint64 len)
+{
+    struct proc *proc = myproc();
+
+    if (user_dst) {
+        return copyout(proc->pagetable, dst, src, len);
+    } else {
+        memmove((char *)dst, src, len);
+        return 0;
+    }
+
+}
+
