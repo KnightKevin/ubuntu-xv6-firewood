@@ -44,6 +44,9 @@ int strlen(const char *s)
     return n;
 }
 
+/** 
+ * return 0-equal
+*/
 int strncmp(const char *s, const char *t, uint len) {
     while (len > 0 && *s && *s == *t) {
         len --;

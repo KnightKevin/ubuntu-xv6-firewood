@@ -242,6 +242,12 @@ static struct inode* namex(char *path, int nameiparent, char *name)
         ip = next;
     }
 
+    if (nameiparent) {
+        // input(ip);
+        printf("todo input(ip);");
+        return 0;
+    }
+
     return ip;
 }
 
@@ -257,7 +263,7 @@ struct inode* dirlookup(struct inode *dp, char *name, uint *poff)
         panic("dirlookup not DIR");
     }
 
-    uint off;
+    uint off,inum;
     struct dirent de;
 
     for (off = 0; off < dp->size; off += sizeof(de)) {
@@ -269,7 +275,17 @@ struct inode* dirlookup(struct inode *dp, char *name, uint *poff)
             continue;
         }
 
-        // todo
+        if (namecmp(name, de.name) == 0) {
+            // entry matches path element
+            if (poff) {
+                // think why?
+                *poff = off;
+            }
+            inum = de.inum;
+            return iget(dp->dev, inum);
+        }
+
+        return 0;
 
     }
 
