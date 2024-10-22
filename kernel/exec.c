@@ -14,6 +14,8 @@ int exec(char *path, char **argv) {
 
     struct inode *ip;
     struct elfhdr elf;
+    pagetable_t pagetable = 0;
+    struct proc *p = myproc();
 
     begin_op();
 
@@ -26,6 +28,17 @@ int exec(char *path, char **argv) {
     if (readi(ip, 0, (uint64)&elf, 0, sizeof(elf)) != sizeof(elf)) {
         goto bad;
     }
+
+    if (elf.magic != ELF_MAGIC) {
+        goto bad;
+    }
+
+    if ((pagetable = proc_pagetable(p)) == 0) {
+        goto bad;
+    }
+
+    // Load program into memory.
+    printf("todo load program into memory!");
 
     bad:
         panic("exec error!");

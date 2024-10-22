@@ -243,7 +243,7 @@ static struct inode* namex(char *path, int nameiparent, char *name)
     }
 
     if (nameiparent) {
-        // input(ip);
+        // todo  input(ip);
         printf("todo input(ip);");
         return 0;
     }
@@ -284,9 +284,6 @@ struct inode* dirlookup(struct inode *dp, char *name, uint *poff)
             inum = de.inum;
             return iget(dp->dev, inum);
         }
-
-        return 0;
-
     }
 
     return 0;
@@ -334,4 +331,10 @@ void ilock(struct inode *ip)
 int namecmp(const char *s, const char *t)
 {
     return strncmp(s, t, DIRSIZ);
+}
+
+void input(struct inode *ip) 
+{
+  // todo acquire(&icache.lock);
+
 }

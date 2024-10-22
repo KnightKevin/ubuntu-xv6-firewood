@@ -94,6 +94,7 @@ int readi(struct inode*, int, uint64, uint, uint);
 struct inode* dirlookup(struct inode*, char*, uint*);
 void ilock(struct inode*);
 int namecmp(const char*, const char*);
+void input(struct inode*);
 
 // virtio_disk.c
 void virtio_disk_init(void);
